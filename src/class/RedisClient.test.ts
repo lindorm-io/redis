@@ -2,7 +2,10 @@ import { RedisClient } from "./RedisClient";
 import { stringifyBlob } from "../util";
 
 const mockGet = jest.fn((key: string, cb: any): void => {
-  cb(null, stringifyBlob({ mock: "blob", data: 12345 }));
+  cb(null, stringifyBlob({ key, mock: "blob", data: 12345 }));
+});
+const mockKeys = jest.fn((pattern: string, cb: any): void => {
+  cb(null, ["key1", "key2"]);
 });
 const mockSet = jest.fn((key: string, val: string, cb: any): void => {
   cb(null, "OK");
@@ -17,6 +20,7 @@ const mockDel = jest.fn((key: string, cb: any): void => {
 jest.mock("redis", () => ({
   createClient: () => ({
     get: mockGet,
+    keys: mockKeys,
     set: mockSet,
     setex: mockSetex,
     del: mockDel,
@@ -48,6 +52,10 @@ describe("RedisClient", () => {
   test("should get", async () => {
     await expect(client.get("key")).resolves.toMatchSnapshot();
     expect(mockGet).toHaveBeenCalledWith("key", expect.any(Function));
+  });
+
+  test("should get all", async () => {
+    await expect(client.getAll("pattern*")).resolves.toMatchSnapshot();
   });
 
   test("should delete", async () => {

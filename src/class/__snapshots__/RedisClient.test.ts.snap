@@ -3,6 +3,22 @@
 exports[`RedisClient should get 1`] = `
 Object {
   "data": 12345,
+  "key": "key",
   "mock": "blob",
 }
+`;
+
+exports[`RedisClient should get all 1`] = `
+Array [
+  Object {
+    "data": 12345,
+    "key": "key1",
+    "mock": "blob",
+  },
+  Object {
+    "data": 12345,
+    "key": "key2",
+    "mock": "blob",
+  },
+]
 `;

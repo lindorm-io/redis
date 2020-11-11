@@ -1,6 +1,7 @@
 import { IRedisClientOptions } from "./RedisClient";
 import { TObject } from "@lindorm-io/core";
 import { parseBlob, stringifyBlob } from "../util";
+import { includes } from "lodash";
 
 export class RedisInMemoryClient {
   public store: TObject<any>;
@@ -21,6 +22,18 @@ export class RedisInMemoryClient {
     }
 
     return parseBlob(data.blob);
+  }
+
+  public async getAll(pattern: string): Promise<Array<TObject<any>>> {
+    const array: Array<TObject<any>> = [];
+    const inMemoryPattern = pattern.replace(/\*/g, "");
+
+    for (const key of Object.keys(this.store)) {
+      if (!includes(key, inMemoryPattern)) continue;
+      array.push(await this.get(key));
+    }
+
+    return array;
   }
 
   public async del(key: string): Promise<void> {
