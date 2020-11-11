@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RedisClient should get 1`] = `
+Object {
+  "data": 12345,
+  "mock": "blob",
+}
+`;
