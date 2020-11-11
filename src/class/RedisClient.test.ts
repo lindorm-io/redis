@@ -31,7 +31,7 @@ describe("RedisClient", () => {
   const client = new RedisClient({ port: 1 });
 
   test("should set", async () => {
-    await expect(client.set("key", { mock: "mock" })).resolves.toBe(undefined);
+    await expect(client.set("key", { mock: "mock" })).resolves.toBe("OK");
     expect(mockSet).toHaveBeenCalledWith(
       "key",
       '{"json":{"mock":"mock"},"meta":{"mock":"string"}}',
@@ -40,7 +40,7 @@ describe("RedisClient", () => {
   });
 
   test("should set with expiry", async () => {
-    await expect(client.set("key", { mock: true }, 100)).resolves.toBe(undefined);
+    await expect(client.set("key", { mock: true }, 100)).resolves.toBe("OK");
     expect(mockSetex).toHaveBeenCalledWith(
       "key",
       100,
@@ -59,7 +59,7 @@ describe("RedisClient", () => {
   });
 
   test("should delete", async () => {
-    await expect(client.del("key")).resolves.toBe(undefined);
+    await expect(client.del("key")).resolves.toBe(1);
     expect(mockDel).toHaveBeenCalledWith("key", expect.any(Function));
   });
 });

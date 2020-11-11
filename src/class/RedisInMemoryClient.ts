@@ -1,7 +1,7 @@
 import { IRedisClientOptions } from "./RedisClient";
 import { TObject } from "@lindorm-io/core";
-import { parseBlob, stringifyBlob } from "../util";
 import { includes } from "lodash";
+import { parseBlob, stringifyBlob } from "../util";
 
 export class RedisInMemoryClient {
   public store: TObject<any>;
@@ -10,18 +10,16 @@ export class RedisInMemoryClient {
     this.store = {};
   }
 
-  public async set(key: string, value: TObject<any>, expiresInSeconds?: number): Promise<void> {
+  public async set(key: string, value: TObject<any>, expiresInSeconds?: number): Promise<string> {
     this.store[key] = { blob: stringifyBlob(value), expiresInSeconds };
+
+    return "OK";
   }
 
   public async get(key: string): Promise<TObject<any>> {
     const data = this.store[key];
 
-    if (!data) {
-      throw new Error("Key not found");
-    }
-
-    return parseBlob(data.blob);
+    return data?.blob ? parseBlob(data.blob) : undefined;
   }
 
   public async getAll(pattern: string): Promise<Array<TObject<any>>> {
@@ -36,11 +34,8 @@ export class RedisInMemoryClient {
     return array;
   }
 
-  public async del(key: string): Promise<void> {
-    if (!this.store[key]) {
-      throw new Error("Key not found");
-    }
-
+  public async del(key: string): Promise<number> {
     this.store[key] = undefined;
+    return 1;
   }
 }

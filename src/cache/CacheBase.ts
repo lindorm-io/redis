@@ -1,4 +1,5 @@
 import Joi from "@hapi/joi";
+import { CacheEntityNotFoundError, CacheEntityNotSetError } from "../error";
 import { IEntity } from "@lindorm-io/core";
 import { Logger } from "@lindorm-io/winston";
 import { RedisClient, RedisInMemoryClient } from "../class";
@@ -47,12 +48,18 @@ export abstract class CacheBase<Entity extends IEntity> implements ICache<Entity
     const key = `${this.prefix}::${json.id}`;
 
     await this.schema.validateAsync(json);
-    await this.client.set(key, json, this.expiresInSeconds);
+    const result = await this.client.set(key, json, this.expiresInSeconds);
+    const success = result === "OK";
 
     this.logger.debug("set", {
       payload: Object.keys(json),
+      result: { success },
       time: Date.now() - start,
     });
+
+    if (!success) {
+      throw new CacheEntityNotSetError(key, result);
+    }
 
     return entity;
   }
@@ -71,7 +78,7 @@ export abstract class CacheBase<Entity extends IEntity> implements ICache<Entity
     });
 
     if (!result) {
-      throw new Error("Not found");
+      throw new CacheEntityNotFoundError(key, result);
     }
 
     return this.createEntity(data);
@@ -94,10 +101,6 @@ export abstract class CacheBase<Entity extends IEntity> implements ICache<Entity
       time: Date.now() - start,
     });
 
-    if (!result) {
-      throw new Error("Not found");
-    }
-
     return data;
   }
 
@@ -107,12 +110,16 @@ export abstract class CacheBase<Entity extends IEntity> implements ICache<Entity
     const { id } = this.getEntityJSON(entity);
     const key = `${this.prefix}::${id}`;
 
-    await this.client.del(key);
+    const deletedRows = await this.client.del(key);
 
     this.logger.debug("del", {
       filter: Object.keys({ id }),
-      result: { success: true },
+      result: { success: !!deletedRows },
       time: Date.now() - start,
     });
+
+    if (deletedRows === 0) {
+      throw new CacheEntityNotFoundError(key, { deletedRows });
+    }
   }
 }

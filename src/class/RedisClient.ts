@@ -25,7 +25,7 @@ export class RedisClient {
     this.asyncSetEx = promisify(client.setex).bind(client);
   }
 
-  public async set(key: string, value: TObject<any>, expiresInSeconds?: number): Promise<void> {
+  public async set(key: string, value: TObject<any>, expiresInSeconds?: number): Promise<string> {
     let result: string;
 
     if (isNumber(expiresInSeconds)) {
@@ -34,9 +34,7 @@ export class RedisClient {
       result = await this.asyncSet(key, stringifyBlob(value));
     }
 
-    if (result !== "OK") {
-      throw new Error("Erroneous result");
-    }
+    return result;
   }
 
   public async get(key: string): Promise<TObject<any>> {
@@ -54,11 +52,7 @@ export class RedisClient {
     return array;
   }
 
-  public async del(key: string): Promise<void> {
-    const deletedRows = await this.asyncDel(key);
-
-    if (deletedRows === 0) {
-      throw new Error("Key not found");
-    }
+  public async del(key: string): Promise<number> {
+    return this.asyncDel(key);
   }
 }
