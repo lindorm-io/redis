@@ -6,7 +6,7 @@ MockDate.set("2020-01-01 08:00:00.000");
 
 describe("stringifyBlob", () => {
   test("should create a text blob with json and meta values", () => {
-    const blobObject: any = {
+    const string = stringifyBlob({
       array: [
         true,
         new Date(),
@@ -32,10 +32,9 @@ describe("stringifyBlob", () => {
         f: undefined,
       },
       string: "string",
-    };
-    const string = stringifyBlob(blobObject);
+    });
 
-    expect(parseBlob(string)).toStrictEqual(blobObject);
+    expect(parseBlob(string)).toMatchSnapshot();
   });
 
   test("should create blob with errors", () => {
