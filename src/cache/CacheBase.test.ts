@@ -29,16 +29,16 @@ class MockEntity extends EntityBase implements IMockEntity {
 }
 
 interface IMockCache extends ICache<MockEntity> {
-  set(entity: MockEntity): Promise<MockEntity>;
-  get(id: string): Promise<MockEntity>;
-  del(entity: MockEntity): Promise<void>;
+  create(entity: MockEntity): Promise<MockEntity>;
+  find(id: string): Promise<MockEntity>;
+  remove(entity: MockEntity): Promise<void>;
 }
 
 class MockCache extends CacheBase<MockEntity> implements IMockCache {
   constructor(options: ICacheOptions) {
     super({
       ...options,
-      entityName: MockEntity.constructor.name,
+      entityName: "mock",
       schema: Joi.object(),
     });
   }
@@ -83,32 +83,49 @@ describe("CacheBase", () => {
     });
   });
 
-  test("should set entity", async () => {
-    await expect(cache.set(entity)).resolves.toMatchSnapshot();
-    expect(client.store[entity.id]).toMatchSnapshot();
+  test("should create entity", async () => {
+    await expect(cache.create(entity)).resolves.toMatchSnapshot();
+    expect(client.store[`mock::${entity.id}`]).toMatchSnapshot();
   });
 
-  test("should set entity with expiry", async () => {
+  test("should create entity with expiry", async () => {
     cache = new MockCache({
       client,
       expiresInSeconds: 100,
       logger,
     });
 
-    await expect(cache.set(entity)).resolves.toMatchSnapshot();
-    expect(client.store[entity.id]).toMatchSnapshot();
+    await expect(cache.create(entity)).resolves.toMatchSnapshot();
+    expect(client.store[`mock::${entity.id}`]).toMatchSnapshot();
   });
 
-  test("should get entity", async () => {
-    await cache.set(entity);
+  test("should find entity", async () => {
+    await cache.create(entity);
 
-    await expect(cache.get(entity.id)).resolves.toMatchSnapshot();
+    await expect(cache.find(entity.id)).resolves.toMatchSnapshot();
   });
 
-  test("should delete entity", async () => {
-    await cache.set(entity);
+  test("should find all entities", async () => {
+    await cache.create(
+      new MockEntity({
+        id: "e397bc49-849e-4df6-a536-7b9fa3574ace",
+        name: "one",
+      }),
+    );
+    await cache.create(
+      new MockEntity({
+        id: "fa354ace-4df6-849e-a536-e397b7c497b9",
+        name: "two",
+      }),
+    );
 
-    await expect(cache.del(entity)).resolves.toBe(undefined);
-    expect(client.store[entity.id]).toMatchSnapshot();
+    await expect(cache.findAll()).resolves.toMatchSnapshot();
+  });
+
+  test("should remove entity", async () => {
+    await cache.create(entity);
+
+    await expect(cache.remove(entity)).resolves.toBe(undefined);
+    expect(client.store[`mock::${entity.id}`]).toMatchSnapshot();
   });
 });

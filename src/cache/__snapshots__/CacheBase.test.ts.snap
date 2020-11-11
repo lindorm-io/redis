@@ -1,8 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CacheBase should delete entity 1`] = `undefined`;
-
-exports[`CacheBase should get entity 1`] = `
+exports[`CacheBase should create entity 1`] = `
 MockEntity {
   "_created": 2020-01-01T07:00:00.000Z,
   "_events": Array [],
@@ -13,25 +11,14 @@ MockEntity {
 }
 `;
 
-exports[`CacheBase should set entity 1`] = `
-MockEntity {
-  "_created": 2020-01-01T07:00:00.000Z,
-  "_events": Array [],
-  "_id": "e397bc49-849e-4df6-a536-7b9fa3574ace",
-  "_updated": 2020-01-01T07:00:00.000Z,
-  "_version": 0,
-  "name": "name",
-}
-`;
-
-exports[`CacheBase should set entity 2`] = `
+exports[`CacheBase should create entity 2`] = `
 Object {
   "blob": "{\\"json\\":{\\"id\\":\\"e397bc49-849e-4df6-a536-7b9fa3574ace\\",\\"created\\":\\"2020-01-01T07:00:00.000Z\\",\\"updated\\":\\"2020-01-01T07:00:00.000Z\\",\\"version\\":\\"0\\",\\"name\\":\\"name\\"},\\"meta\\":{\\"id\\":\\"string\\",\\"created\\":\\"date\\",\\"updated\\":\\"date\\",\\"version\\":\\"number\\",\\"name\\":\\"string\\"}}",
   "expiresInSeconds": null,
 }
 `;
 
-exports[`CacheBase should set entity with expiry 1`] = `
+exports[`CacheBase should create entity with expiry 1`] = `
 MockEntity {
   "_created": 2020-01-01T07:00:00.000Z,
   "_events": Array [],
@@ -42,9 +29,43 @@ MockEntity {
 }
 `;
 
-exports[`CacheBase should set entity with expiry 2`] = `
+exports[`CacheBase should create entity with expiry 2`] = `
 Object {
   "blob": "{\\"json\\":{\\"id\\":\\"e397bc49-849e-4df6-a536-7b9fa3574ace\\",\\"created\\":\\"2020-01-01T07:00:00.000Z\\",\\"updated\\":\\"2020-01-01T07:00:00.000Z\\",\\"version\\":\\"0\\",\\"name\\":\\"name\\"},\\"meta\\":{\\"id\\":\\"string\\",\\"created\\":\\"date\\",\\"updated\\":\\"date\\",\\"version\\":\\"number\\",\\"name\\":\\"string\\"}}",
   "expiresInSeconds": 100,
 }
 `;
+
+exports[`CacheBase should find all entities 1`] = `
+Array [
+  MockEntity {
+    "_created": 2020-01-01T07:00:00.000Z,
+    "_events": Array [],
+    "_id": "e397bc49-849e-4df6-a536-7b9fa3574ace",
+    "_updated": 2020-01-01T07:00:00.000Z,
+    "_version": 0,
+    "name": "one",
+  },
+  MockEntity {
+    "_created": 2020-01-01T07:00:00.000Z,
+    "_events": Array [],
+    "_id": "fa354ace-4df6-849e-a536-e397b7c497b9",
+    "_updated": 2020-01-01T07:00:00.000Z,
+    "_version": 0,
+    "name": "two",
+  },
+]
+`;
+
+exports[`CacheBase should find entity 1`] = `
+MockEntity {
+  "_created": 2020-01-01T07:00:00.000Z,
+  "_events": Array [],
+  "_id": "e397bc49-849e-4df6-a536-7b9fa3574ace",
+  "_updated": 2020-01-01T07:00:00.000Z,
+  "_version": 0,
+  "name": "name",
+}
+`;
+
+exports[`CacheBase should remove entity 1`] = `undefined`;
