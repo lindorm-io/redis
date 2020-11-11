@@ -42,10 +42,12 @@ export abstract class CacheBase<Entity extends IEntity> implements ICache<Entity
 
   protected abstract getEntityJSON(entity: Entity): IEntity;
 
+  protected abstract getEntityKey(entity: Entity): string;
+
   async create(entity: Entity): Promise<Entity> {
     const start = Date.now();
     const json = this.getEntityJSON(entity);
-    const key = `${this.prefix}::${json.id}`;
+    const key = `${this.prefix}::${this.getEntityKey(entity)}`;
 
     await this.schema.validateAsync(json);
     const result = await this.client.set(key, json, this.expiresInSeconds);
@@ -64,21 +66,21 @@ export abstract class CacheBase<Entity extends IEntity> implements ICache<Entity
     return entity;
   }
 
-  async find(id: string): Promise<Entity> {
+  async find(key: string): Promise<Entity> {
     const start = Date.now();
 
-    const key = `${this.prefix}::${id}`;
-    const result: unknown = await this.client.get(key);
+    const prefixKey = `${this.prefix}::${key}`;
+    const result: unknown = await this.client.get(prefixKey);
     const data = result as IEntity;
 
     this.logger.debug("get", {
-      id,
+      key: prefixKey,
       result: { success: !!result },
       time: Date.now() - start,
     });
 
     if (!result) {
-      throw new CacheEntityNotFoundError(key, result);
+      throw new CacheEntityNotFoundError(prefixKey, result);
     }
 
     return this.createEntity(data);
@@ -107,19 +109,19 @@ export abstract class CacheBase<Entity extends IEntity> implements ICache<Entity
   async remove(entity: Entity): Promise<void> {
     const start = Date.now();
 
-    const { id } = this.getEntityJSON(entity);
-    const key = `${this.prefix}::${id}`;
+    const key = this.getEntityKey(entity);
+    const prefixKey = `${this.prefix}::${key}`;
 
-    const deletedRows = await this.client.del(key);
+    const deletedRows = await this.client.del(prefixKey);
 
     this.logger.debug("del", {
-      filter: Object.keys({ id }),
+      key: prefixKey,
       result: { success: !!deletedRows },
       time: Date.now() - start,
     });
 
     if (deletedRows === 0) {
-      throw new CacheEntityNotFoundError(key, { deletedRows });
+      throw new CacheEntityNotFoundError(prefixKey, { deletedRows });
     }
   }
 }

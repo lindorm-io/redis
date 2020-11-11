@@ -57,6 +57,10 @@ class MockCache extends CacheBase<MockEntity> implements IMockCache {
       name: entity.name,
     };
   }
+
+  protected getEntityKey(entity: MockEntity): string {
+    return entity.id;
+  }
 }
 
 const logger = new Logger({
