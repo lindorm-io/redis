@@ -1,7 +1,7 @@
 import Joi from "@hapi/joi";
 import { IEntity } from "@lindorm-io/core";
 import { Logger } from "@lindorm-io/winston";
-import { RedisClient } from "../class/RedisClient";
+import { RedisClient, RedisInMemoryClient } from "../class";
 
 export interface ICache<Entity> {
   set(entity: Entity): Promise<Entity>;
@@ -12,7 +12,7 @@ export interface ICache<Entity> {
 export interface ICacheOptions {
   expiresInSeconds?: number;
   logger: Logger;
-  port: number;
+  client: RedisClient | RedisInMemoryClient;
 }
 
 export interface ICacheBaseOptions extends ICacheOptions {
@@ -21,16 +21,17 @@ export interface ICacheBaseOptions extends ICacheOptions {
 }
 
 export abstract class CacheBase<Entity extends IEntity> implements ICache<Entity> {
-  private client: RedisClient;
+  private client: RedisClient | RedisInMemoryClient;
   private schema: Joi.Schema;
   private expiresInSeconds: number;
   protected logger: Logger;
 
   protected constructor(options: ICacheBaseOptions) {
-    this.client = new RedisClient({ port: options.port });
-    this.schema = options.schema;
+    this.client = options.client;
     this.expiresInSeconds = options.expiresInSeconds || null;
-    this.logger = options.logger.createChildLogger(["redis", options.entityName]);
+    this.schema = options.schema;
+
+    this.logger = options.logger.createChildLogger(["redis", "cache", options.entityName]);
   }
 
   protected abstract createEntity(data: IEntity): Entity;

@@ -1,12 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`CacheBase should delete entity 1`] = `undefined`;
+
 exports[`CacheBase should get entity 1`] = `
 MockEntity {
-  "_created": "created",
+  "_created": 2020-01-01T07:00:00.000Z,
   "_events": Array [],
-  "_id": "id",
-  "_updated": "updated",
-  "_version": "version",
+  "_id": "e397bc49-849e-4df6-a536-7b9fa3574ace",
+  "_updated": 2020-01-01T07:00:00.000Z,
+  "_version": 0,
   "name": "name",
 }
 `;
@@ -22,6 +24,13 @@ MockEntity {
 }
 `;
 
+exports[`CacheBase should set entity 2`] = `
+Object {
+  "blob": "{\\"json\\":{\\"id\\":\\"e397bc49-849e-4df6-a536-7b9fa3574ace\\",\\"created\\":\\"2020-01-01T07:00:00.000Z\\",\\"updated\\":\\"2020-01-01T07:00:00.000Z\\",\\"version\\":\\"0\\",\\"name\\":\\"name\\"},\\"meta\\":{\\"id\\":\\"string\\",\\"created\\":\\"date\\",\\"updated\\":\\"date\\",\\"version\\":\\"number\\",\\"name\\":\\"string\\"}}",
+  "expiresInSeconds": null,
+}
+`;
+
 exports[`CacheBase should set entity with expiry 1`] = `
 MockEntity {
   "_created": 2020-01-01T07:00:00.000Z,
@@ -30,5 +39,12 @@ MockEntity {
   "_updated": 2020-01-01T07:00:00.000Z,
   "_version": 0,
   "name": "name",
+}
+`;
+
+exports[`CacheBase should set entity with expiry 2`] = `
+Object {
+  "blob": "{\\"json\\":{\\"id\\":\\"e397bc49-849e-4df6-a536-7b9fa3574ace\\",\\"created\\":\\"2020-01-01T07:00:00.000Z\\",\\"updated\\":\\"2020-01-01T07:00:00.000Z\\",\\"version\\":\\"0\\",\\"name\\":\\"name\\"},\\"meta\\":{\\"id\\":\\"string\\",\\"created\\":\\"date\\",\\"updated\\":\\"date\\",\\"version\\":\\"number\\",\\"name\\":\\"string\\"}}",
+  "expiresInSeconds": 100,
 }
 `;

@@ -3,13 +3,13 @@ import MockDate from "mockdate";
 import { CacheBase, ICache, ICacheOptions } from "./CacheBase";
 import { EntityBase, IEntity, IEntityBaseOptions } from "@lindorm-io/core";
 import { Logger, LogLevel } from "@lindorm-io/winston";
+import { RedisInMemoryClient } from "../class";
 
 jest.mock("uuid", () => ({
   v4: () => "e397bc49-849e-4df6-a536-7b9fa3574ace",
 }));
 
 MockDate.set("2020-01-01 08:00:00.000");
-const date = new Date("2020-01-01 08:00:00.000");
 
 interface IMockEntity extends IEntity {
   name: string;
@@ -59,32 +59,6 @@ class MockCache extends CacheBase<MockEntity> implements IMockCache {
   }
 }
 
-const mockSet = jest.fn((...args: any) => undefined);
-const mockGet = jest.fn((...args: any) => ({
-  id: "id",
-  created: "created",
-  updated: "updated",
-  version: "version",
-  name: "name",
-}));
-const mockDel = jest.fn((...args: any) => undefined);
-
-jest.mock("../class/RedisClient", () => ({
-  RedisClient: class RedisClient {
-    set(...args: any): any {
-      mockSet(...args);
-    }
-
-    get(...args: any): any {
-      return mockGet(...args);
-    }
-
-    del(...args: any): any {
-      mockDel(...args);
-    }
-  },
-}));
-
 const logger = new Logger({
   packageName: "n",
   packageVersion: "v",
@@ -92,13 +66,17 @@ const logger = new Logger({
 logger.addConsole(LogLevel.ERROR);
 
 describe("CacheBase", () => {
+  let client: RedisInMemoryClient;
   let cache: MockCache;
   let entity: MockEntity;
 
   beforeEach(() => {
+    client = new RedisInMemoryClient({
+      port: 1,
+    });
     cache = new MockCache({
       logger,
-      port: 1,
+      client,
     });
     entity = new MockEntity({
       name: "name",
@@ -107,35 +85,30 @@ describe("CacheBase", () => {
 
   test("should set entity", async () => {
     await expect(cache.set(entity)).resolves.toMatchSnapshot();
-    expect(mockSet).toHaveBeenCalledWith(
-      "e397bc49-849e-4df6-a536-7b9fa3574ace",
-      { created: date, id: "e397bc49-849e-4df6-a536-7b9fa3574ace", name: "name", updated: date, version: 0 },
-      null,
-    );
+    expect(client.store[entity.id]).toMatchSnapshot();
   });
 
   test("should set entity with expiry", async () => {
     cache = new MockCache({
+      client,
       expiresInSeconds: 100,
       logger,
-      port: 1,
     });
 
     await expect(cache.set(entity)).resolves.toMatchSnapshot();
-    expect(mockSet).toHaveBeenCalledWith(
-      "e397bc49-849e-4df6-a536-7b9fa3574ace",
-      { created: date, id: "e397bc49-849e-4df6-a536-7b9fa3574ace", name: "name", updated: date, version: 0 },
-      100,
-    );
+    expect(client.store[entity.id]).toMatchSnapshot();
   });
 
   test("should get entity", async () => {
-    await expect(cache.get("key")).resolves.toMatchSnapshot();
-    expect(mockGet).toHaveBeenCalledWith("key");
+    await cache.set(entity);
+
+    await expect(cache.get(entity.id)).resolves.toMatchSnapshot();
   });
 
   test("should delete entity", async () => {
+    await cache.set(entity);
+
     await expect(cache.del(entity)).resolves.toBe(undefined);
-    expect(mockDel).toHaveBeenCalledWith("e397bc49-849e-4df6-a536-7b9fa3574ace");
+    expect(client.store[entity.id]).toMatchSnapshot();
   });
 });
