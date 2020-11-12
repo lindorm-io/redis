@@ -1,48 +1,62 @@
 import redis from "redis";
+import { IRedisClient, IRedisClientOptions } from "../typing";
 import { TObject, TPromise } from "@lindorm-io/core";
 import { isNumber } from "lodash";
 import { parseBlob, stringifyBlob } from "../util";
 import { promisify } from "util";
 
-export interface IRedisClientOptions {
-  port: number;
+export interface IAsyncClient {
+  del: TPromise<number>;
+  get: TPromise<string>;
+  keys: TPromise<string>;
+  quit: TPromise<string>;
+  set: TPromise<string>;
+  setEx: TPromise<string>;
 }
 
-export class RedisClient {
-  private asyncDel: TPromise<number>;
-  private asyncGet: TPromise<string>;
-  private asyncKeys: TPromise<string>;
-  private asyncSet: TPromise<string>;
-  private asyncSetEx: TPromise<string>;
+export class RedisClient implements IRedisClient {
+  private client: IAsyncClient;
+  private port: number;
 
   constructor(options: IRedisClientOptions) {
-    const client = redis.createClient(options.port);
+    this.port = options.port;
+  }
 
-    this.asyncDel = promisify(client.del).bind(client);
-    this.asyncGet = promisify(client.get).bind(client);
-    this.asyncKeys = promisify(client.keys).bind(client);
-    this.asyncSet = promisify(client.set).bind(client);
-    this.asyncSetEx = promisify(client.setex).bind(client);
+  public async connect(): Promise<void> {
+    const client: redis.RedisClient = redis.createClient(this.port);
+
+    this.client = {
+      del: promisify(client.del).bind(client),
+      get: promisify(client.get).bind(client),
+      keys: promisify(client.keys).bind(client),
+      quit: promisify(client.quit).bind(client),
+      set: promisify(client.set).bind(client),
+      setEx: promisify(client.setex).bind(client),
+    };
+  }
+
+  public async quit(): Promise<string> {
+    return this.client.quit();
   }
 
   public async set(key: string, value: TObject<any>, expiresInSeconds?: number): Promise<string> {
     let result: string;
 
     if (isNumber(expiresInSeconds)) {
-      result = await this.asyncSetEx(key, expiresInSeconds, stringifyBlob(value));
+      result = await this.client.setEx(key, expiresInSeconds, stringifyBlob(value));
     } else {
-      result = await this.asyncSet(key, stringifyBlob(value));
+      result = await this.client.set(key, stringifyBlob(value));
     }
 
     return result;
   }
 
   public async get(key: string): Promise<TObject<any>> {
-    return parseBlob(await this.asyncGet(key));
+    return parseBlob(await this.client.get(key));
   }
 
   public async getAll(pattern: string): Promise<Array<TObject<any>>> {
-    const keys = await this.asyncKeys(pattern);
+    const keys = await this.client.keys(pattern);
     const array: Array<TObject<any>> = [];
 
     for (const key of keys) {
@@ -53,6 +67,6 @@ export class RedisClient {
   }
 
   public async del(key: string): Promise<number> {
-    return this.asyncDel(key);
+    return this.client.del(key);
   }
 }

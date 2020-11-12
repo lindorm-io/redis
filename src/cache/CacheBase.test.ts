@@ -3,7 +3,9 @@ import MockDate from "mockdate";
 import { CacheBase, ICache, ICacheOptions } from "./CacheBase";
 import { EntityBase, IEntity, IEntityBaseOptions } from "@lindorm-io/core";
 import { Logger, LogLevel } from "@lindorm-io/winston";
-import { RedisInMemoryClient } from "../class";
+import { RedisConnection } from "../infrastructure";
+import { RedisConnectionType } from "../enum";
+import { TRedisClient } from "../typing";
 
 jest.mock("uuid", () => ({
   v4: () => "e397bc49-849e-4df6-a536-7b9fa3574ace",
@@ -70,14 +72,20 @@ const logger = new Logger({
 logger.addConsole(LogLevel.ERROR);
 
 describe("CacheBase", () => {
-  let client: RedisInMemoryClient;
+  let redis: RedisConnection;
+  let client: TRedisClient;
   let cache: MockCache;
   let entity: MockEntity;
 
-  beforeEach(() => {
-    client = new RedisInMemoryClient({
+  beforeEach(async () => {
+    redis = new RedisConnection({
+      type: RedisConnectionType.MEMORY,
       port: 1,
     });
+
+    await redis.connect();
+    client = redis.getClient();
+
     cache = new MockCache({
       logger,
       client,
@@ -87,8 +95,15 @@ describe("CacheBase", () => {
     });
   });
 
+  afterEach(async () => {
+    await client.quit();
+    jest.clearAllMocks();
+  });
+
   test("should create entity", async () => {
     await expect(cache.create(entity)).resolves.toMatchSnapshot();
+
+    // @ts-ignore
     expect(client.store[`mock::${entity.id}`]).toMatchSnapshot();
   });
 
@@ -100,6 +115,8 @@ describe("CacheBase", () => {
     });
 
     await expect(cache.create(entity)).resolves.toMatchSnapshot();
+
+    // @ts-ignore
     expect(client.store[`mock::${entity.id}`]).toMatchSnapshot();
   });
 
@@ -130,6 +147,8 @@ describe("CacheBase", () => {
     await cache.create(entity);
 
     await expect(cache.remove(entity)).resolves.toBe(undefined);
+
+    // @ts-ignore
     expect(client.store[`mock::${entity.id}`]).toMatchSnapshot();
   });
 });

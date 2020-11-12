@@ -1,11 +1,17 @@
 import { RedisClient } from "./RedisClient";
 import { stringifyBlob } from "../util";
 
+const mockDel = jest.fn((key: string, cb: any): void => {
+  cb(null, 1);
+});
 const mockGet = jest.fn((key: string, cb: any): void => {
   cb(null, stringifyBlob({ key, mock: "blob", data: 12345 }));
 });
 const mockKeys = jest.fn((pattern: string, cb: any): void => {
   cb(null, ["key1", "key2"]);
+});
+const mockQuit = jest.fn((cb: any): void => {
+  cb(null, "OK");
 });
 const mockSet = jest.fn((key: string, val: string, cb: any): void => {
   cb(null, "OK");
@@ -13,22 +19,33 @@ const mockSet = jest.fn((key: string, val: string, cb: any): void => {
 const mockSetex = jest.fn((key: string, val: string, num: number, cb: any): void => {
   cb(null, "OK");
 });
-const mockDel = jest.fn((key: string, cb: any): void => {
-  cb(null, 1);
-});
 
 jest.mock("redis", () => ({
   createClient: () => ({
+    del: mockDel,
     get: mockGet,
     keys: mockKeys,
+    quit: mockQuit,
     set: mockSet,
     setex: mockSetex,
-    del: mockDel,
   }),
 }));
 
 describe("RedisClient", () => {
-  const client = new RedisClient({ port: 1 });
+  let client: RedisClient;
+
+  beforeEach(async () => {
+    client = new RedisClient({ port: 1 });
+    await client.connect();
+  });
+
+  afterEach(jest.clearAllMocks);
+
+  test("should disconnect", async () => {
+    await client.quit();
+
+    expect(mockQuit).toHaveBeenCalled();
+  });
 
   test("should set", async () => {
     await expect(client.set("key", { mock: "mock" })).resolves.toBe("OK");
