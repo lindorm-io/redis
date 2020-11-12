@@ -2,7 +2,7 @@ import Joi from "@hapi/joi";
 import { CacheEntityNotFoundError, CacheEntityNotSetError } from "../error";
 import { IEntity } from "@lindorm-io/core";
 import { Logger } from "@lindorm-io/winston";
-import { RedisClient, RedisInMemoryClient } from "../class";
+import { TRedisClient } from "../typing";
 
 export interface ICache<Entity> {
   create(entity: Entity): Promise<Entity>;
@@ -12,9 +12,9 @@ export interface ICache<Entity> {
 }
 
 export interface ICacheOptions {
+  client: TRedisClient;
   expiresInSeconds?: number;
   logger: Logger;
-  client: RedisClient | RedisInMemoryClient;
 }
 
 export interface ICacheBaseOptions extends ICacheOptions {
@@ -23,7 +23,7 @@ export interface ICacheBaseOptions extends ICacheOptions {
 }
 
 export abstract class CacheBase<Entity extends IEntity> implements ICache<Entity> {
-  private client: RedisClient | RedisInMemoryClient;
+  private client: TRedisClient;
   private expiresInSeconds: number;
   private prefix: string;
   private schema: Joi.Schema;
