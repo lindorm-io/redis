@@ -10,13 +10,19 @@ npm install --save @lindorm-io/redis
 
 ### Redis Client
 ```typescript
-const client = new RedisClient({
+const redis = new RedisConnection({
+  type: RedisConnectionType.CACHE,
   port: 6379,
 });
+
+await redis.connect();
+const client = redis.getClient();
 
 await client.set("key", { blobify: "data" });
 const data = await client.get("key");
 await client.del("key");
+
+await redis.disconnect();
 ```
 
 ### Cache
@@ -24,6 +30,7 @@ await client.del("key");
 class EntityCache extends CacheBase implements ICache {}
 
 const cache = new EntityCache({
+  client,
   expiresInSeconds: 100,
   port: 6379,
   logger, // "@lindorm-io/winston" logger
