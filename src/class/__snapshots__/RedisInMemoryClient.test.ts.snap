@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RedisInMemoryClient should delete 1`] = `
+Object {
+  "key": undefined,
+}
+`;
+
+exports[`RedisInMemoryClient should get 1`] = `
+Object {
+  "blob": "yes",
+}
+`;
+
+exports[`RedisInMemoryClient should get all 1`] = `
+Array [
+  Object {
+    "blob": "yes",
+  },
+  Object {
+    "blob": "no",
+  },
+]
+`;
+
+exports[`RedisInMemoryClient should set 1`] = `
+Object {
+  "key": Object {
+    "blob": "{\\"json\\":{\\"blob\\":{\\"object\\":{\\"is\\":\\"true\\"}}},\\"meta\\":{\\"blob\\":{\\"object\\":{\\"is\\":\\"boolean\\"}}}}",
+    "expiresInSeconds": undefined,
+  },
+}
+`;
