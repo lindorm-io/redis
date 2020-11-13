@@ -25,6 +25,7 @@ export interface IRedisConnection {
 
 export interface IRedisConnectionBaseOptions {
   port: number;
+  inMemoryCache?: TObject<any>;
 }
 
 export interface IRedisConnectionOptions extends IRedisConnectionBaseOptions {

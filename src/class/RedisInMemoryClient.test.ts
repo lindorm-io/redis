@@ -4,7 +4,7 @@ describe("RedisInMemoryClient", () => {
   let client: RedisInMemoryClient;
 
   beforeEach(async () => {
-    client = new RedisInMemoryClient({ port: 1 });
+    client = new RedisInMemoryClient();
     await client.connect();
   });
 
@@ -14,7 +14,7 @@ describe("RedisInMemoryClient", () => {
 
   test("should set", async () => {
     await expect(client.set("key", { blob: { object: { is: true } } })).resolves.toBe("OK");
-    expect(client.store).toMatchSnapshot();
+    expect(client.cache).toMatchSnapshot();
   });
 
   test("should get", async () => {
@@ -34,6 +34,6 @@ describe("RedisInMemoryClient", () => {
     await expect(client.set("key", { blob: "yes" })).resolves.toBe("OK");
 
     await expect(client.del("key")).resolves.toBe(1);
-    expect(client.store).toMatchSnapshot();
+    expect(client.cache).toMatchSnapshot();
   });
 });

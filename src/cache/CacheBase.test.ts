@@ -1,7 +1,7 @@
 import Joi from "@hapi/joi";
 import MockDate from "mockdate";
 import { CacheBase, ICache, ICacheOptions } from "./CacheBase";
-import { EntityBase, IEntity, IEntityBaseOptions } from "@lindorm-io/core";
+import { EntityBase, IEntity, IEntityBaseOptions, TObject } from "@lindorm-io/core";
 import { Logger, LogLevel } from "@lindorm-io/winston";
 import { RedisConnection } from "../infrastructure";
 import { RedisConnectionType } from "../enum";
@@ -72,15 +72,19 @@ const logger = new Logger({
 logger.addConsole(LogLevel.ERROR);
 
 describe("CacheBase", () => {
+  let inMemoryCache: TObject<any>;
   let redis: RedisConnection;
   let client: TRedisClient;
   let cache: MockCache;
   let entity: MockEntity;
 
   beforeEach(async () => {
+    inMemoryCache = {};
+
     redis = new RedisConnection({
       type: RedisConnectionType.MEMORY,
       port: 1,
+      inMemoryCache,
     });
 
     await redis.connect();
@@ -103,8 +107,7 @@ describe("CacheBase", () => {
   test("should create entity", async () => {
     await expect(cache.create(entity)).resolves.toMatchSnapshot();
 
-    // @ts-ignore
-    expect(client.store[`mock::${entity.id}`]).toMatchSnapshot();
+    expect(inMemoryCache).toMatchSnapshot();
   });
 
   test("should create entity with expiry", async () => {
@@ -116,8 +119,7 @@ describe("CacheBase", () => {
 
     await expect(cache.create(entity)).resolves.toMatchSnapshot();
 
-    // @ts-ignore
-    expect(client.store[`mock::${entity.id}`]).toMatchSnapshot();
+    expect(inMemoryCache).toMatchSnapshot();
   });
 
   test("should find entity", async () => {
@@ -148,7 +150,6 @@ describe("CacheBase", () => {
 
     await expect(cache.remove(entity)).resolves.toBe(undefined);
 
-    // @ts-ignore
-    expect(client.store[`mock::${entity.id}`]).toMatchSnapshot();
+    expect(inMemoryCache).toMatchSnapshot();
   });
 });

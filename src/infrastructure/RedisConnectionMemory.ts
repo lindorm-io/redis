@@ -1,16 +1,19 @@
-import { RedisConnectionBase } from "./RedisConnectionBase";
 import { IRedisConnection, IRedisConnectionBaseOptions } from "../typing";
+import { RedisConnectionBase } from "./RedisConnectionBase";
 import { RedisInMemoryClient } from "../class";
+import { TObject } from "@lindorm-io/core";
 
 export class RedisConnectionMemory extends RedisConnectionBase implements IRedisConnection {
-  protected client: RedisInMemoryClient;
+  public client: RedisInMemoryClient;
+  public inMemoryCache: TObject<any>;
 
   constructor(options: IRedisConnectionBaseOptions) {
     super(options);
+    this.inMemoryCache = options.inMemoryCache;
   }
 
   public async connect(): Promise<void> {
-    this.client = new RedisInMemoryClient({ port: this.port });
+    this.client = new RedisInMemoryClient(this.inMemoryCache);
     await this.client.connect();
   }
 
