@@ -66,6 +66,12 @@ export abstract class CacheBase<Entity extends IEntity> implements ICache<Entity
     return entity;
   }
 
+  async update(entity: Entity): Promise<Entity> {
+    await this.find(this.getEntityKey(entity));
+
+    return this.create(entity);
+  }
+
   async find(key: string): Promise<Entity> {
     const start = Date.now();
 

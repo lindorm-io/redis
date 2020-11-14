@@ -77,3 +77,14 @@ Object {
   "mock::e397bc49-849e-4df6-a536-7b9fa3574ace": undefined,
 }
 `;
+
+exports[`CacheBase should update entity 1`] = `
+MockEntity {
+  "_created": 2020-01-01T07:00:00.000Z,
+  "_events": Array [],
+  "_id": "e397bc49-849e-4df6-a536-7b9fa3574ace",
+  "_updated": 2020-01-01T07:00:00.000Z,
+  "_version": 0,
+  "name": "new name",
+}
+`;

@@ -128,6 +128,14 @@ describe("CacheBase", () => {
     await expect(cache.find(entity.id)).resolves.toMatchSnapshot();
   });
 
+  test("should update entity", async () => {
+    await cache.create(entity);
+
+    entity.name = "new name";
+
+    await expect(cache.update(entity)).resolves.toMatchSnapshot();
+  });
+
   test("should find all entities", async () => {
     await cache.create(
       new MockEntity({
