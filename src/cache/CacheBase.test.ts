@@ -32,7 +32,9 @@ class MockEntity extends EntityBase implements IMockEntity {
 
 interface IMockCache extends ICache<MockEntity> {
   create(entity: MockEntity): Promise<MockEntity>;
+  update(entity: MockEntity): Promise<MockEntity>;
   find(id: string): Promise<MockEntity>;
+  findAll(): Promise<Array<MockEntity>>;
   remove(entity: MockEntity): Promise<void>;
 }
 

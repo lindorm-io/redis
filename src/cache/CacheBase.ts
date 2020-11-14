@@ -6,6 +6,7 @@ import { TRedisClient } from "../typing";
 
 export interface ICache<Entity> {
   create(entity: Entity): Promise<Entity>;
+  update(entity: Entity): Promise<Entity>;
   find(id: string): Promise<Entity>;
   findAll(): Promise<Array<Entity>>;
   remove(entity: Entity): Promise<void>;
