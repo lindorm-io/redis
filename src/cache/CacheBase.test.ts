@@ -7,10 +7,6 @@ import { RedisConnection } from "../infrastructure";
 import { RedisConnectionType } from "../enum";
 import { TRedisClient } from "../typing";
 
-jest.mock("uuid", () => ({
-  v4: () => "e397bc49-849e-4df6-a536-7b9fa3574ace",
-}));
-
 MockDate.set("2020-01-01 08:00:00.000");
 
 interface IMockEntity extends IEntity {
@@ -28,6 +24,8 @@ class MockEntity extends EntityBase implements IMockEntity {
     super(options);
     this.name = options.name;
   }
+
+  create() {}
 }
 
 interface IMockCache extends ICache<MockEntity> {
@@ -97,6 +95,7 @@ describe("CacheBase", () => {
       client,
     });
     entity = new MockEntity({
+      id: "uuid",
       name: "name",
     });
   });

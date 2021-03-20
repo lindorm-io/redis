@@ -8,9 +8,9 @@ export abstract class RedisConnectionBase implements IRedisConnection {
     this.port = options.port;
   }
 
-  public abstract async connect(): Promise<void>;
+  public abstract connect(): Promise<void>;
 
-  public abstract async disconnect(): Promise<void>;
+  public abstract disconnect(): Promise<void>;
 
   public getClient(): TRedisClient {
     if (!this.client) {

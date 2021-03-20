@@ -4,7 +4,7 @@ exports[`CacheBase should create entity 1`] = `
 MockEntity {
   "_created": 2020-01-01T07:00:00.000Z,
   "_events": Array [],
-  "_id": "e397bc49-849e-4df6-a536-7b9fa3574ace",
+  "_id": "uuid",
   "_updated": 2020-01-01T07:00:00.000Z,
   "_version": 0,
   "name": "name",
@@ -13,8 +13,8 @@ MockEntity {
 
 exports[`CacheBase should create entity 2`] = `
 Object {
-  "mock::e397bc49-849e-4df6-a536-7b9fa3574ace": Object {
-    "blob": "{\\"json\\":{\\"id\\":\\"e397bc49-849e-4df6-a536-7b9fa3574ace\\",\\"created\\":\\"2020-01-01T07:00:00.000Z\\",\\"updated\\":\\"2020-01-01T07:00:00.000Z\\",\\"version\\":\\"0\\",\\"name\\":\\"name\\"},\\"meta\\":{\\"id\\":\\"string\\",\\"created\\":\\"date\\",\\"updated\\":\\"date\\",\\"version\\":\\"number\\",\\"name\\":\\"string\\"}}",
+  "mock::uuid": Object {
+    "blob": "{\\"json\\":{\\"id\\":\\"uuid\\",\\"created\\":\\"2020-01-01T07:00:00.000Z\\",\\"updated\\":\\"2020-01-01T07:00:00.000Z\\",\\"version\\":\\"0\\",\\"name\\":\\"name\\"},\\"meta\\":{\\"id\\":\\"string\\",\\"created\\":\\"date\\",\\"updated\\":\\"date\\",\\"version\\":\\"number\\",\\"name\\":\\"string\\"}}",
     "expiresInSeconds": null,
   },
 }
@@ -24,7 +24,7 @@ exports[`CacheBase should create entity with expiry 1`] = `
 MockEntity {
   "_created": 2020-01-01T07:00:00.000Z,
   "_events": Array [],
-  "_id": "e397bc49-849e-4df6-a536-7b9fa3574ace",
+  "_id": "uuid",
   "_updated": 2020-01-01T07:00:00.000Z,
   "_version": 0,
   "name": "name",
@@ -33,8 +33,8 @@ MockEntity {
 
 exports[`CacheBase should create entity with expiry 2`] = `
 Object {
-  "mock::e397bc49-849e-4df6-a536-7b9fa3574ace": Object {
-    "blob": "{\\"json\\":{\\"id\\":\\"e397bc49-849e-4df6-a536-7b9fa3574ace\\",\\"created\\":\\"2020-01-01T07:00:00.000Z\\",\\"updated\\":\\"2020-01-01T07:00:00.000Z\\",\\"version\\":\\"0\\",\\"name\\":\\"name\\"},\\"meta\\":{\\"id\\":\\"string\\",\\"created\\":\\"date\\",\\"updated\\":\\"date\\",\\"version\\":\\"number\\",\\"name\\":\\"string\\"}}",
+  "mock::uuid": Object {
+    "blob": "{\\"json\\":{\\"id\\":\\"uuid\\",\\"created\\":\\"2020-01-01T07:00:00.000Z\\",\\"updated\\":\\"2020-01-01T07:00:00.000Z\\",\\"version\\":\\"0\\",\\"name\\":\\"name\\"},\\"meta\\":{\\"id\\":\\"string\\",\\"created\\":\\"date\\",\\"updated\\":\\"date\\",\\"version\\":\\"number\\",\\"name\\":\\"string\\"}}",
     "expiresInSeconds": 100,
   },
 }
@@ -65,7 +65,7 @@ exports[`CacheBase should find entity 1`] = `
 MockEntity {
   "_created": 2020-01-01T07:00:00.000Z,
   "_events": Array [],
-  "_id": "e397bc49-849e-4df6-a536-7b9fa3574ace",
+  "_id": "uuid",
   "_updated": 2020-01-01T07:00:00.000Z,
   "_version": 0,
   "name": "name",
@@ -74,7 +74,7 @@ MockEntity {
 
 exports[`CacheBase should remove entity 1`] = `
 Object {
-  "mock::e397bc49-849e-4df6-a536-7b9fa3574ace": undefined,
+  "mock::uuid": undefined,
 }
 `;
 
@@ -82,7 +82,7 @@ exports[`CacheBase should update entity 1`] = `
 MockEntity {
   "_created": 2020-01-01T07:00:00.000Z,
   "_events": Array [],
-  "_id": "e397bc49-849e-4df6-a536-7b9fa3574ace",
+  "_id": "uuid",
   "_updated": 2020-01-01T07:00:00.000Z,
   "_version": 0,
   "name": "new name",
