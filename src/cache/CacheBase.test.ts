@@ -1,7 +1,7 @@
 import Joi from "@hapi/joi";
 import MockDate from "mockdate";
 import { CacheBase, ICache, ICacheOptions } from "./CacheBase";
-import { EntityBase, IEntity, IEntityBaseOptions, TObject } from "@lindorm-io/core";
+import { EntityBase, IEntity, IEntityBaseOptions } from "@lindorm-io/entity";
 import { Logger, LogLevel } from "@lindorm-io/winston";
 import { RedisConnection } from "../infrastructure";
 import { RedisConnectionType } from "../enum";
@@ -72,7 +72,7 @@ const logger = new Logger({
 logger.addConsole(LogLevel.ERROR);
 
 describe("CacheBase", () => {
-  let inMemoryCache: TObject<any>;
+  let inMemoryCache: Record<string, any>;
   let redis: RedisConnection;
   let client: TRedisClient;
   let cache: MockCache;

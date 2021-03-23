@@ -1,12 +1,11 @@
 import { IRedisClient } from "../typing";
-import { TObject } from "@lindorm-io/core";
 import { includes } from "lodash";
 import { parseBlob, stringifyBlob } from "../util";
 
 export class RedisInMemoryClient implements IRedisClient {
-  public cache: TObject<any>;
+  public cache: Record<string, any>;
 
-  constructor(cache?: TObject<any>) {
+  constructor(cache?: Record<string, any>) {
     this.cache = cache || {};
   }
 
@@ -18,20 +17,20 @@ export class RedisInMemoryClient implements IRedisClient {
     return Promise.resolve("OK");
   }
 
-  public async set(key: string, value: TObject<any>, expiresInSeconds?: number): Promise<string> {
+  public async set(key: string, value: Record<string, any>, expiresInSeconds?: number): Promise<string> {
     this.cache[key] = { blob: stringifyBlob(value), expiresInSeconds };
 
     return Promise.resolve("OK");
   }
 
-  public async get(key: string): Promise<TObject<any>> {
+  public async get(key: string): Promise<Record<string, any>> {
     const data = this.cache[key];
 
     return Promise.resolve(data?.blob ? parseBlob(data.blob) : undefined);
   }
 
-  public async getAll(pattern: string): Promise<Array<TObject<any>>> {
-    const array: Array<TObject<any>> = [];
+  public async getAll(pattern: string): Promise<Array<Record<string, any>>> {
+    const array: Array<Record<string, any>> = [];
     const inMemoryPattern = pattern.replace(/\*/g, "");
 
     for (const key of Object.keys(this.cache)) {

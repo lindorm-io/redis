@@ -1,4 +1,4 @@
-import { TObject, isObject } from "@lindorm-io/core";
+import { isObject } from "@lindorm-io/core";
 import { isArray, isBoolean, isDate, isError, isNull, isNumber, isString, isUndefined } from "lodash";
 
 export const getType = (value: any): string => {
@@ -28,8 +28,8 @@ export const getMetaArray = (input: Array<any>): Array<string> => {
   return result;
 };
 
-export const getMetaObject = (input: TObject<any>): TObject<string> => {
-  const result: TObject<any> = {};
+export const getMetaObject = (input: Record<string, any>): Record<string, string> => {
+  const result: Record<string, any> = {};
 
   for (const [key, value] of Object.entries(input)) {
     if (isObject(value)) {
@@ -70,8 +70,8 @@ const stringifyArrayValues = (input: Array<any>): Array<any> => {
   return result;
 };
 
-const stringifyObjectValues = (input: TObject<any>): TObject<any> => {
-  const result: TObject<any> = {};
+const stringifyObjectValues = (input: Record<string, any>): Record<string, any> => {
+  const result: Record<string, any> = {};
 
   for (const [key, value] of Object.entries(input)) {
     if (isObject(value)) {
@@ -96,7 +96,7 @@ const stringifyObjectValues = (input: TObject<any>): TObject<any> => {
   return result;
 };
 
-export const stringifyBlob = (object: TObject<any>): string => {
+export const stringifyBlob = (object: Record<string, any>): string => {
   return JSON.stringify({
     json: stringifyObjectValues(object),
     meta: getMetaObject(object),

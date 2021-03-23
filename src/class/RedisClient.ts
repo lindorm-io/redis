@@ -1,6 +1,5 @@
 import redis from "redis";
-import { IRedisClient, IRedisClientOptions } from "../typing";
-import { TObject, TPromise } from "@lindorm-io/core";
+import { IRedisClient, IRedisClientOptions, TPromise } from "../typing";
 import { isNumber } from "lodash";
 import { parseBlob, stringifyBlob } from "../util";
 import { promisify } from "util";
@@ -39,7 +38,7 @@ export class RedisClient implements IRedisClient {
     return this.client.quit();
   }
 
-  public async set(key: string, value: TObject<any>, expiresInSeconds?: number): Promise<string> {
+  public async set(key: string, value: Record<string, any>, expiresInSeconds?: number): Promise<string> {
     let result: string;
 
     if (isNumber(expiresInSeconds)) {
@@ -51,13 +50,13 @@ export class RedisClient implements IRedisClient {
     return result;
   }
 
-  public async get(key: string): Promise<TObject<any>> {
+  public async get(key: string): Promise<Record<string, any>> {
     return parseBlob(await this.client.get(key));
   }
 
-  public async getAll(pattern: string): Promise<Array<TObject<any>>> {
+  public async getAll(pattern: string): Promise<Array<Record<string, any>>> {
     const keys = await this.client.keys(pattern);
-    const array: Array<TObject<any>> = [];
+    const array: Array<Record<string, any>> = [];
 
     for (const key of keys) {
       array.push(await this.get(key));

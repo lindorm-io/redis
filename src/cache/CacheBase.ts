@@ -1,6 +1,6 @@
 import Joi from "@hapi/joi";
 import { CacheEntityNotFoundError, CacheEntityNotSetError } from "../error";
-import { IEntity } from "@lindorm-io/core";
+import { IEntity } from "@lindorm-io/entity";
 import { Logger } from "@lindorm-io/winston";
 import { TRedisClient } from "../typing";
 

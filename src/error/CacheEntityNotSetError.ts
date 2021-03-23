@@ -1,4 +1,4 @@
-import { ExtendableError } from "@lindorm-io/core";
+import { ExtendableError } from "@lindorm-io/errors";
 
 export class CacheEntityNotSetError extends ExtendableError {
   constructor(key: string, result: string) {

@@ -1,4 +1,4 @@
-import { TObject, isObject } from "@lindorm-io/core";
+import { isObject } from "@lindorm-io/core";
 import { isArray, isBoolean, isObject as _isObject, isString } from "lodash";
 
 const parseErrorValue = (input: any): Error => {
@@ -15,7 +15,7 @@ const parseErrorValue = (input: any): Error => {
   return error;
 };
 
-const parseArrayValue = (input: any, meta: TObject<any>): Array<any> => {
+const parseArrayValue = (input: any, meta: Record<string, any>): Array<any> => {
   const parsed = isArray(input) ? input : JSON.parse(input);
 
   const result: Array<any> = [];
@@ -45,8 +45,8 @@ const parseArrayValue = (input: any, meta: TObject<any>): Array<any> => {
   return result;
 };
 
-const parseObjectValue = (json: TObject<any>, meta: TObject<any>): TObject<any> => {
-  const result: TObject<any> = {};
+const parseObjectValue = (json: Record<string, any>, meta: Record<string, any>): Record<string, any> => {
+  const result: Record<string, any> = {};
 
   for (const [key, value] of Object.entries(json)) {
     if (isObject(meta[key])) {
@@ -73,7 +73,7 @@ const parseObjectValue = (json: TObject<any>, meta: TObject<any>): TObject<any> 
   return result;
 };
 
-export const parseBlob = (string: string): TObject<any> => {
+export const parseBlob = (string: string): Record<string, any> => {
   const { json, meta } = JSON.parse(string);
   return parseObjectValue(json, meta);
 };

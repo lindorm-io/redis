@@ -1,11 +1,10 @@
 import { IRedisConnection, IRedisConnectionBaseOptions } from "../typing";
 import { RedisConnectionBase } from "./RedisConnectionBase";
 import { RedisInMemoryClient } from "../class";
-import { TObject } from "@lindorm-io/core";
 
 export class RedisConnectionMemory extends RedisConnectionBase implements IRedisConnection {
   public client: RedisInMemoryClient;
-  public inMemoryCache: TObject<any>;
+  public inMemoryCache: Record<string, any>;
 
   constructor(options: IRedisConnectionBaseOptions) {
     super(options);
