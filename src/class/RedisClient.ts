@@ -1,5 +1,5 @@
-import redis from "redis";
-import { IRedisClient, IRedisClientOptions, TPromise } from "../typing";
+import redis, { ClientOpts } from "redis";
+import { IRedisClient, TPromise } from "../typing";
 import { isNumber } from "lodash";
 import { parseBlob, stringifyBlob } from "../util";
 import { promisify } from "util";
@@ -14,17 +14,17 @@ export interface IAsyncClient {
 }
 
 export class RedisClient implements IRedisClient {
-  private client: IAsyncClient;
-  private port: number;
+  private _client: IAsyncClient;
+  private _clientOptions: ClientOpts;
 
-  constructor(options: IRedisClientOptions) {
-    this.port = options.port;
+  constructor(options: ClientOpts) {
+    this._clientOptions = options;
   }
 
   public async connect(): Promise<void> {
-    const client: redis.RedisClient = redis.createClient(this.port);
+    const client: redis.RedisClient = redis.createClient(this._clientOptions);
 
-    this.client = {
+    this._client = {
       del: promisify(client.del).bind(client),
       get: promisify(client.get).bind(client),
       keys: promisify(client.keys).bind(client),
@@ -35,27 +35,27 @@ export class RedisClient implements IRedisClient {
   }
 
   public async quit(): Promise<string> {
-    return this.client.quit();
+    return this._client.quit();
   }
 
   public async set(key: string, value: Record<string, any>, expiresInSeconds?: number): Promise<string> {
     let result: string;
 
     if (isNumber(expiresInSeconds)) {
-      result = await this.client.setEx(key, expiresInSeconds, stringifyBlob(value));
+      result = await this._client.setEx(key, expiresInSeconds, stringifyBlob(value));
     } else {
-      result = await this.client.set(key, stringifyBlob(value));
+      result = await this._client.set(key, stringifyBlob(value));
     }
 
     return result;
   }
 
   public async get(key: string): Promise<Record<string, any>> {
-    return parseBlob(await this.client.get(key));
+    return parseBlob(await this._client.get(key));
   }
 
   public async getAll(pattern: string): Promise<Array<Record<string, any>>> {
-    const keys = await this.client.keys(pattern);
+    const keys = await this._client.keys(pattern);
     const array: Array<Record<string, any>> = [];
 
     for (const key of keys) {
@@ -66,6 +66,6 @@ export class RedisClient implements IRedisClient {
   }
 
   public async del(key: string): Promise<number> {
-    return this.client.del(key);
+    return this._client.del(key);
   }
 }

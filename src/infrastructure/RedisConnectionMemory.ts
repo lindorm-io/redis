@@ -1,22 +1,22 @@
-import { IRedisConnection, IRedisConnectionBaseOptions } from "../typing";
+import { IRedisConnection, IRedisConnectionOptions } from "../typing";
 import { RedisConnectionBase } from "./RedisConnectionBase";
 import { RedisInMemoryClient } from "../class";
 
 export class RedisConnectionMemory extends RedisConnectionBase implements IRedisConnection {
-  public client: RedisInMemoryClient;
-  public inMemoryCache: Record<string, any>;
+  public _client: RedisInMemoryClient;
+  public _inMemoryCache: Record<string, any>;
 
-  constructor(options: IRedisConnectionBaseOptions) {
+  constructor(options: IRedisConnectionOptions) {
     super(options);
-    this.inMemoryCache = options.inMemoryCache;
+    this._inMemoryCache = options.inMemoryCache;
   }
 
   public async connect(): Promise<void> {
-    this.client = new RedisInMemoryClient(this.inMemoryCache);
-    await this.client.connect();
+    this._client = new RedisInMemoryClient(this._inMemoryCache);
+    await this._client.connect();
   }
 
   public async disconnect(): Promise<void> {
-    await this.client.quit();
+    await this._client.quit();
   }
 }

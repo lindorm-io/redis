@@ -1,11 +1,11 @@
 import Joi from "@hapi/joi";
 import MockDate from "mockdate";
-import { CacheBase, ICache, ICacheOptions } from "./CacheBase";
+import { CacheBase } from "./CacheBase";
 import { EntityBase, IEntity, IEntityBaseOptions } from "@lindorm-io/entity";
-import { Logger, LogLevel } from "@lindorm-io/winston";
 import { RedisConnection } from "../infrastructure";
 import { RedisConnectionType } from "../enum";
-import { TRedisClient } from "../typing";
+import { ICache, ICacheOptions, TRedisClient } from "../typing";
+import { logger } from "../test";
 
 MockDate.set("2020-01-01 08:00:00.000");
 
@@ -65,12 +65,6 @@ class MockCache extends CacheBase<MockEntity> implements IMockCache {
   }
 }
 
-const logger = new Logger({
-  packageName: "n",
-  packageVersion: "v",
-});
-logger.addConsole(LogLevel.ERROR);
-
 describe("CacheBase", () => {
   let inMemoryCache: Record<string, any>;
   let redis: RedisConnection;
@@ -88,12 +82,10 @@ describe("CacheBase", () => {
     });
 
     await redis.connect();
-    client = redis.getClient();
+    client = redis.client();
 
-    cache = new MockCache({
-      logger,
-      client,
-    });
+    // @ts-ignore
+    cache = new MockCache({ logger, client });
     entity = new MockEntity({
       id: "uuid",
       name: "name",
@@ -112,11 +104,8 @@ describe("CacheBase", () => {
   });
 
   test("should create entity with expiry", async () => {
-    cache = new MockCache({
-      client,
-      expiresInSeconds: 100,
-      logger,
-    });
+    // @ts-ignore
+    cache = new MockCache({ client, expiresInSeconds: 100, logger });
 
     await expect(cache.create(entity)).resolves.toMatchSnapshot();
 

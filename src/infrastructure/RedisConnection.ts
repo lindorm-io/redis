@@ -30,7 +30,7 @@ export class RedisConnection implements IRedisConnection {
     return this.connection.disconnect();
   }
 
-  public getClient(): TRedisClient {
-    return this.connection.getClient();
+  public client(): TRedisClient {
+    return this.connection.client();
   }
 }

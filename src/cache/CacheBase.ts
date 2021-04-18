@@ -1,44 +1,9 @@
-import Joi from "@hapi/joi";
 import { CacheEntityNotFoundError, CacheEntityNotSetError } from "../error";
+import { ICache } from "../typing";
 import { IEntity } from "@lindorm-io/entity";
-import { Logger } from "@lindorm-io/winston";
-import { TRedisClient } from "../typing";
+import { RedisCache } from "./RedisCache";
 
-export interface ICache<Entity> {
-  create(entity: Entity): Promise<Entity>;
-  update(entity: Entity): Promise<Entity>;
-  find(id: string): Promise<Entity>;
-  findAll(): Promise<Array<Entity>>;
-  remove(entity: Entity): Promise<void>;
-}
-
-export interface ICacheOptions {
-  client: TRedisClient;
-  expiresInSeconds?: number;
-  logger: Logger;
-}
-
-export interface ICacheBaseOptions extends ICacheOptions {
-  entityName: string;
-  schema: Joi.Schema;
-}
-
-export abstract class CacheBase<Entity extends IEntity> implements ICache<Entity> {
-  private client: TRedisClient;
-  private expiresInSeconds: number;
-  private prefix: string;
-  private schema: Joi.Schema;
-  protected logger: Logger;
-
-  protected constructor(options: ICacheBaseOptions) {
-    this.client = options.client;
-    this.expiresInSeconds = options.expiresInSeconds || null;
-    this.prefix = options.entityName;
-    this.schema = options.schema;
-
-    this.logger = options.logger.createChildLogger(["redis", "cache", options.entityName]);
-  }
-
+export abstract class CacheBase<Entity extends IEntity> extends RedisCache implements ICache<Entity> {
   protected abstract createEntity(data: IEntity): Entity;
 
   protected abstract getEntityJSON(entity: Entity): IEntity;
