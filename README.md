@@ -16,7 +16,7 @@ const redis = new RedisConnection({
 });
 
 await redis.connect();
-const client = redis.getClient();
+const client = redis.client();
 
 await client.set("key", { blobify: "data" });
 const data = await client.get("key");
