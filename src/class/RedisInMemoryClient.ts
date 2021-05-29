@@ -1,11 +1,11 @@
 import { IRedisClient } from "../typing";
 import { includes } from "lodash";
-import { parseBlob, stringifyBlob } from "../util";
+import { parseBlob, stringifyBlob } from "@lindorm-io/string-blob";
 
 export class RedisInMemoryClient implements IRedisClient {
   public cache: Record<string, any>;
 
-  constructor(cache?: Record<string, any>) {
+  public constructor(cache?: Record<string, any>) {
     this.cache = cache || {};
   }
 
@@ -23,7 +23,7 @@ export class RedisInMemoryClient implements IRedisClient {
     return Promise.resolve("OK");
   }
 
-  public async get(key: string): Promise<Record<string, any>> {
+  public async get(key: string): Promise<Record<string, any> | undefined> {
     const data = this.cache[key];
 
     return Promise.resolve(data?.blob ? parseBlob(data.blob) : undefined);
@@ -35,7 +35,8 @@ export class RedisInMemoryClient implements IRedisClient {
 
     for (const key of Object.keys(this.cache)) {
       if (!includes(key, inMemoryPattern)) continue;
-      array.push(await this.get(key));
+      const item = await this.get(key);
+      if (item) array.push(item);
     }
 
     return Promise.resolve(array);

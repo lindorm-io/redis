@@ -1,40 +1,42 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`CacheBase should create entity 1`] = `
-MockEntity {
-  "_created": 2020-01-01T07:00:00.000Z,
-  "_events": Array [],
-  "_id": "uuid",
-  "_updated": 2020-01-01T07:00:00.000Z,
-  "_version": 0,
+Object {
+  "created": 2020-01-01T08:00:00.000Z,
+  "events": Array [],
+  "hasCreatedFunctionBeenCalled": true,
+  "id": "10192b05-6d39-4a2d-907a-32318fda8cb9",
   "name": "name",
+  "updated": 2020-01-01T08:00:00.000Z,
+  "version": 0,
 }
 `;
 
 exports[`CacheBase should create entity 2`] = `
 Object {
-  "mock::uuid": Object {
-    "blob": "{\\"json\\":{\\"id\\":\\"uuid\\",\\"created\\":\\"2020-01-01T07:00:00.000Z\\",\\"updated\\":\\"2020-01-01T07:00:00.000Z\\",\\"version\\":\\"0\\",\\"name\\":\\"name\\"},\\"meta\\":{\\"id\\":\\"string\\",\\"created\\":\\"date\\",\\"updated\\":\\"date\\",\\"version\\":\\"number\\",\\"name\\":\\"string\\"}}",
-    "expiresInSeconds": null,
+  "mock::10192b05-6d39-4a2d-907a-32318fda8cb9": Object {
+    "blob": "{\\"json\\":{\\"id\\":\\"10192b05-6d39-4a2d-907a-32318fda8cb9\\",\\"created\\":\\"2020-01-01T08:00:00.000Z\\",\\"events\\":[],\\"updated\\":\\"2020-01-01T08:00:00.000Z\\",\\"version\\":\\"0\\",\\"name\\":\\"name\\",\\"hasCreatedFunctionBeenCalled\\":\\"false\\"},\\"meta\\":{\\"id\\":\\"string\\",\\"created\\":\\"date\\",\\"events\\":[],\\"updated\\":\\"date\\",\\"version\\":\\"number\\",\\"name\\":\\"string\\",\\"hasCreatedFunctionBeenCalled\\":\\"boolean\\"}}",
+    "expiresInSeconds": undefined,
   },
 }
 `;
 
 exports[`CacheBase should create entity with expiry 1`] = `
-MockEntity {
-  "_created": 2020-01-01T07:00:00.000Z,
-  "_events": Array [],
-  "_id": "uuid",
-  "_updated": 2020-01-01T07:00:00.000Z,
-  "_version": 0,
+Object {
+  "created": 2020-01-01T08:00:00.000Z,
+  "events": Array [],
+  "hasCreatedFunctionBeenCalled": true,
+  "id": "10192b05-6d39-4a2d-907a-32318fda8cb9",
   "name": "name",
+  "updated": 2020-01-01T08:00:00.000Z,
+  "version": 0,
 }
 `;
 
 exports[`CacheBase should create entity with expiry 2`] = `
 Object {
-  "mock::uuid": Object {
-    "blob": "{\\"json\\":{\\"id\\":\\"uuid\\",\\"created\\":\\"2020-01-01T07:00:00.000Z\\",\\"updated\\":\\"2020-01-01T07:00:00.000Z\\",\\"version\\":\\"0\\",\\"name\\":\\"name\\"},\\"meta\\":{\\"id\\":\\"string\\",\\"created\\":\\"date\\",\\"updated\\":\\"date\\",\\"version\\":\\"number\\",\\"name\\":\\"string\\"}}",
+  "mock::10192b05-6d39-4a2d-907a-32318fda8cb9": Object {
+    "blob": "{\\"json\\":{\\"id\\":\\"10192b05-6d39-4a2d-907a-32318fda8cb9\\",\\"created\\":\\"2020-01-01T08:00:00.000Z\\",\\"events\\":[],\\"updated\\":\\"2020-01-01T08:00:00.000Z\\",\\"version\\":\\"0\\",\\"name\\":\\"name\\",\\"hasCreatedFunctionBeenCalled\\":\\"false\\"},\\"meta\\":{\\"id\\":\\"string\\",\\"created\\":\\"date\\",\\"events\\":[],\\"updated\\":\\"date\\",\\"version\\":\\"number\\",\\"name\\":\\"string\\",\\"hasCreatedFunctionBeenCalled\\":\\"boolean\\"}}",
     "expiresInSeconds": 100,
   },
 }
@@ -42,49 +44,76 @@ Object {
 
 exports[`CacheBase should find all entities 1`] = `
 Array [
-  MockEntity {
-    "_created": 2020-01-01T07:00:00.000Z,
-    "_events": Array [],
-    "_id": "e397bc49-849e-4df6-a536-7b9fa3574ace",
-    "_updated": 2020-01-01T07:00:00.000Z,
-    "_version": 0,
+  Object {
+    "created": 2020-01-01T08:00:00.000Z,
+    "events": Array [],
+    "hasCreatedFunctionBeenCalled": false,
+    "id": "5a8c3582-0a5f-4af8-b393-ac95d65284ee",
     "name": "one",
+    "updated": 2020-01-01T08:00:00.000Z,
+    "version": 0,
   },
-  MockEntity {
-    "_created": 2020-01-01T07:00:00.000Z,
-    "_events": Array [],
-    "_id": "fa354ace-4df6-849e-a536-e397b7c497b9",
-    "_updated": 2020-01-01T07:00:00.000Z,
-    "_version": 0,
+  Object {
+    "created": 2020-01-01T08:00:00.000Z,
+    "events": Array [],
+    "hasCreatedFunctionBeenCalled": false,
+    "id": "a9afb688-b9c0-42ce-9fe2-1e2f76fee036",
     "name": "two",
+    "updated": 2020-01-01T08:00:00.000Z,
+    "version": 0,
   },
 ]
 `;
 
 exports[`CacheBase should find entity 1`] = `
-MockEntity {
-  "_created": 2020-01-01T07:00:00.000Z,
-  "_events": Array [],
-  "_id": "uuid",
-  "_updated": 2020-01-01T07:00:00.000Z,
-  "_version": 0,
+Object {
+  "created": 2020-01-01T08:00:00.000Z,
+  "events": Array [],
+  "hasCreatedFunctionBeenCalled": false,
+  "id": "10192b05-6d39-4a2d-907a-32318fda8cb9",
   "name": "name",
+  "updated": 2020-01-01T08:00:00.000Z,
+  "version": 0,
 }
+`;
+
+exports[`CacheBase should find many entities 1`] = `
+Array [
+  Object {
+    "created": 2020-01-01T08:00:00.000Z,
+    "events": Array [],
+    "hasCreatedFunctionBeenCalled": false,
+    "id": "712606fb-f371-44fe-b6b0-0aa6807950d8",
+    "name": "two",
+    "updated": 2020-01-01T08:00:00.000Z,
+    "version": 0,
+  },
+  Object {
+    "created": 2020-01-01T08:00:00.000Z,
+    "events": Array [],
+    "hasCreatedFunctionBeenCalled": false,
+    "id": "8e84c5b7-f1fa-4c73-a342-2da513ffa1df",
+    "name": "two",
+    "updated": 2020-01-01T08:00:00.000Z,
+    "version": 0,
+  },
+]
 `;
 
 exports[`CacheBase should remove entity 1`] = `
 Object {
-  "mock::uuid": undefined,
+  "mock::10192b05-6d39-4a2d-907a-32318fda8cb9": undefined,
 }
 `;
 
 exports[`CacheBase should update entity 1`] = `
-MockEntity {
-  "_created": 2020-01-01T07:00:00.000Z,
-  "_events": Array [],
-  "_id": "uuid",
-  "_updated": 2020-01-01T07:00:00.000Z,
-  "_version": 0,
+Object {
+  "created": 2020-01-01T08:00:00.000Z,
+  "events": Array [],
+  "hasCreatedFunctionBeenCalled": true,
+  "id": "10192b05-6d39-4a2d-907a-32318fda8cb9",
   "name": "new name",
+  "updated": 2020-01-01T08:00:00.000Z,
+  "version": 0,
 }
 `;

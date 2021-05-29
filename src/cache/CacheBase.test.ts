@@ -1,67 +1,83 @@
-import Joi from "@hapi/joi";
+import Joi from "joi";
 import MockDate from "mockdate";
 import { CacheBase } from "./CacheBase";
-import { EntityBase, IEntity, IEntityBaseOptions } from "@lindorm-io/entity";
+import {
+  EntityBase,
+  EntityCreationError,
+  IEntity,
+  IEntityAttributes,
+  IEntityOptions,
+  JOI_ENTITY_BASE,
+} from "@lindorm-io/entity";
 import { RedisConnection } from "../infrastructure";
 import { RedisConnectionType } from "../enum";
-import { ICache, ICacheOptions, TRedisClient } from "../typing";
+import { ICacheOptions, TRedisClient } from "../typing";
 import { logger } from "../test";
 
 MockDate.set("2020-01-01 08:00:00.000");
 
-interface IMockEntity extends IEntity {
+interface ITestEntityAttributes extends IEntityAttributes {
   name: string;
+  hasCreatedFunctionBeenCalled: boolean;
 }
 
-interface IMockEntityOptions extends IEntityBaseOptions {
+interface ITestEntityOptions extends IEntityOptions {
   name: string;
+  hasCreatedFunctionBeenCalled?: boolean;
 }
 
-class MockEntity extends EntityBase implements IMockEntity {
+interface ITestEntity extends IEntity<ITestEntityAttributes> {}
+
+const schema = Joi.object({
+  ...JOI_ENTITY_BASE,
+  name: Joi.string().required(),
+  hasCreatedFunctionBeenCalled: Joi.boolean().required(),
+});
+
+class TestEntity extends EntityBase<ITestEntityAttributes> implements ITestEntity {
   public name: string;
+  public hasCreatedFunctionBeenCalled: boolean;
 
-  constructor(options: IMockEntityOptions) {
+  constructor(options: ITestEntityOptions) {
     super(options);
     this.name = options.name;
+    this.hasCreatedFunctionBeenCalled = options.hasCreatedFunctionBeenCalled || false;
   }
 
-  create() {}
+  create() {
+    if (this.hasCreatedFunctionBeenCalled) {
+      throw new EntityCreationError("TestEntity");
+    }
+    this.hasCreatedFunctionBeenCalled = true;
+  }
+
+  getKey() {
+    return this.id;
+  }
+
+  async schemaValidation() {
+    await schema.validateAsync(this.toJSON());
+  }
+
+  toJSON() {
+    return {
+      ...this.defaultJSON(),
+      name: this.name,
+      hasCreatedFunctionBeenCalled: this.hasCreatedFunctionBeenCalled,
+    };
+  }
 }
 
-interface IMockCache extends ICache<MockEntity> {
-  create(entity: MockEntity): Promise<MockEntity>;
-  update(entity: MockEntity): Promise<MockEntity>;
-  find(id: string): Promise<MockEntity>;
-  findAll(): Promise<Array<MockEntity>>;
-  remove(entity: MockEntity): Promise<void>;
-}
-
-class MockCache extends CacheBase<MockEntity> implements IMockCache {
+class TestCache extends CacheBase<ITestEntityAttributes, TestEntity> {
   constructor(options: ICacheOptions) {
     super({
       ...options,
       entityName: "mock",
-      schema: Joi.object(),
     });
   }
 
-  protected createEntity(data: IMockEntity): MockEntity {
-    return new MockEntity(data);
-  }
-
-  protected getEntityJSON(entity: MockEntity): IMockEntity {
-    return {
-      id: entity.id,
-      created: entity.created,
-      updated: entity.updated,
-      version: entity.version,
-
-      name: entity.name,
-    };
-  }
-
-  protected getEntityKey(entity: MockEntity): string {
-    return entity.id;
+  protected createEntity(data: ITestEntityAttributes): TestEntity {
+    return new TestEntity(data);
   }
 }
 
@@ -69,8 +85,8 @@ describe("CacheBase", () => {
   let inMemoryCache: Record<string, any>;
   let redis: RedisConnection;
   let client: TRedisClient;
-  let cache: MockCache;
-  let entity: MockEntity;
+  let cache: TestCache;
+  let entity: TestEntity;
 
   beforeEach(async () => {
     inMemoryCache = {};
@@ -84,10 +100,9 @@ describe("CacheBase", () => {
     await redis.connect();
     client = redis.client();
 
-    // @ts-ignore
-    cache = new MockCache({ logger, client });
-    entity = new MockEntity({
-      id: "uuid",
+    cache = new TestCache({ logger, client });
+    entity = new TestEntity({
+      id: "10192b05-6d39-4a2d-907a-32318fda8cb9",
       name: "name",
     });
   });
@@ -105,7 +120,7 @@ describe("CacheBase", () => {
 
   test("should create entity with expiry", async () => {
     // @ts-ignore
-    cache = new MockCache({ client, expiresInSeconds: 100, logger });
+    cache = new TestCache({ client, expiresInSeconds: 100, logger });
 
     await expect(cache.create(entity)).resolves.toMatchSnapshot();
 
@@ -128,19 +143,42 @@ describe("CacheBase", () => {
 
   test("should find all entities", async () => {
     await cache.create(
-      new MockEntity({
-        id: "e397bc49-849e-4df6-a536-7b9fa3574ace",
+      new TestEntity({
+        id: "5a8c3582-0a5f-4af8-b393-ac95d65284ee",
         name: "one",
       }),
     );
     await cache.create(
-      new MockEntity({
-        id: "fa354ace-4df6-849e-a536-e397b7c497b9",
+      new TestEntity({
+        id: "a9afb688-b9c0-42ce-9fe2-1e2f76fee036",
         name: "two",
       }),
     );
 
     await expect(cache.findAll()).resolves.toMatchSnapshot();
+  });
+
+  test("should find many entities", async () => {
+    await cache.create(
+      new TestEntity({
+        id: "0868b84c-ba82-49b2-968e-eba9c02286dd",
+        name: "one",
+      }),
+    );
+    await cache.create(
+      new TestEntity({
+        id: "712606fb-f371-44fe-b6b0-0aa6807950d8",
+        name: "two",
+      }),
+    );
+    await cache.create(
+      new TestEntity({
+        id: "8e84c5b7-f1fa-4c73-a342-2da513ffa1df",
+        name: "two",
+      }),
+    );
+
+    await expect(cache.findMany({ name: "two" })).resolves.toMatchSnapshot();
   });
 
   test("should remove entity", async () => {

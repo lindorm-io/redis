@@ -1,5 +1,5 @@
 import { RedisClient } from "./RedisClient";
-import { stringifyBlob } from "../util";
+import { stringifyBlob } from "@lindorm-io/string-blob";
 
 const mockDel = jest.fn((key: string, cb: any): void => {
   cb(null, 1);

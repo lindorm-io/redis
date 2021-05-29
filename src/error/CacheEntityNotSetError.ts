@@ -1,7 +1,7 @@
 import { ExtendableError } from "@lindorm-io/errors";
 
 export class CacheEntityNotSetError extends ExtendableError {
-  constructor(key: string, result: string) {
+  public constructor(key: string, result: any) {
     super("Unable to set Entity", {
       debug: { key, result },
     });

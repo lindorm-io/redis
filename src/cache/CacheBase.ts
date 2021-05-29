@@ -1,25 +1,34 @@
 import { CacheEntityNotFoundError, CacheEntityNotSetError } from "../error";
 import { ICache } from "../typing";
-import { IEntity } from "@lindorm-io/entity";
+import { EntityCreationError, IEntity, IEntityAttributes } from "@lindorm-io/entity";
 import { RedisCache } from "./RedisCache";
+import { filter as _filter } from "lodash";
 
-export abstract class CacheBase<Entity extends IEntity> extends RedisCache implements ICache<Entity> {
-  protected abstract createEntity(data: IEntity): Entity;
+export abstract class CacheBase<Interface extends IEntityAttributes, Entity extends IEntity<Interface>>
+  extends RedisCache
+  implements ICache<Interface, Entity>
+{
+  protected abstract createEntity(data: Interface): Entity;
 
-  protected abstract getEntityJSON(entity: Entity): IEntity;
+  public async create(entity: Entity): Promise<Entity> {
+    await entity.schemaValidation();
 
-  protected abstract getEntityKey(entity: Entity): string;
-
-  async create(entity: Entity): Promise<Entity> {
     const start = Date.now();
-    const json = this.getEntityJSON(entity);
-    const key = `${this.prefix}::${this.getEntityKey(entity)}`;
+    const json = entity.toJSON();
+    const key = `${this.prefix}::${entity.getKey()}`;
 
-    await this.schema.validateAsync(json);
+    try {
+      entity.create();
+    } catch (err) {
+      if (!(err instanceof EntityCreationError)) {
+        throw err;
+      }
+    }
+
     const result = await this.client.set(key, json, this.expiresInSeconds);
     const success = result === "OK";
 
-    this.logger.debug("set", {
+    this.logger.debug("create", {
       payload: Object.keys(json),
       result: { success },
       time: Date.now() - start,
@@ -32,18 +41,17 @@ export abstract class CacheBase<Entity extends IEntity> extends RedisCache imple
     return entity;
   }
 
-  async update(entity: Entity): Promise<Entity> {
+  public async update(entity: Entity): Promise<Entity> {
     return this.create(entity);
   }
 
-  async find(key: string): Promise<Entity> {
+  public async find(key: string): Promise<Entity> {
     const start = Date.now();
 
     const prefixKey = `${this.prefix}::${key}`;
     const result: unknown = await this.client.get(prefixKey);
-    const data = result as IEntity;
 
-    this.logger.debug("get", {
+    this.logger.debug("find", {
       key: prefixKey,
       result: { success: !!result },
       time: Date.now() - start,
@@ -53,21 +61,25 @@ export abstract class CacheBase<Entity extends IEntity> extends RedisCache imple
       throw new CacheEntityNotFoundError(prefixKey, result);
     }
 
-    return this.createEntity(data);
+    return this.createEntity(result as Interface);
   }
 
-  async findAll(): Promise<Array<Entity>> {
+  public async findMany(filter: Partial<Interface>): Promise<Array<Entity>> {
+    return _filter(await this.findAll(), filter) as Array<Entity>;
+  }
+
+  public async findAll(): Promise<Array<Entity>> {
     const start = Date.now();
 
     const pattern = `${this.prefix}::*`;
-    const result: any = await this.client.getAll(pattern);
-    const data: Array<Entity> = [];
+    const result = (await this.client.getAll(pattern)) as Array<Interface>;
+    const data = [];
 
-    for (const object of Object.values(result)) {
-      data.push(this.createEntity(object as IEntity));
+    for (const item of Object.values(result)) {
+      data.push(this.createEntity(item));
     }
 
-    this.logger.debug("getAll", {
+    this.logger.debug("findAll", {
       pattern,
       result: { success: !!result },
       time: Date.now() - start,
@@ -76,15 +88,15 @@ export abstract class CacheBase<Entity extends IEntity> extends RedisCache imple
     return data;
   }
 
-  async remove(entity: Entity): Promise<void> {
+  public async remove(entity: Entity): Promise<void> {
     const start = Date.now();
 
-    const key = this.getEntityKey(entity);
+    const key = entity.getKey();
     const prefixKey = `${this.prefix}::${key}`;
 
     const deletedRows = await this.client.del(prefixKey);
 
-    this.logger.debug("del", {
+    this.logger.debug("remove", {
       key: prefixKey,
       result: { success: !!deletedRows },
       time: Date.now() - start,

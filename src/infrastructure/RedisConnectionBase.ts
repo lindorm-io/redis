@@ -2,13 +2,13 @@ import { ClientOpts } from "redis";
 import { IRedisConnection, IRedisConnectionOptions, TRedisClient } from "../typing";
 
 export abstract class RedisConnectionBase implements IRedisConnection {
-  protected _client: TRedisClient;
-  protected _clientOptions: ClientOpts;
+  protected readonly clientOptions: ClientOpts;
+  protected _client: TRedisClient | undefined;
 
   protected constructor(options: IRedisConnectionOptions) {
     const { inMemoryCache, type, ...clientOptions } = options;
 
-    this._clientOptions = clientOptions;
+    this.clientOptions = clientOptions;
   }
 
   public abstract connect(): Promise<void>;

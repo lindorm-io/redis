@@ -7,7 +7,7 @@ import { RedisConnectionType } from "../enum";
 export class RedisConnection implements IRedisConnection {
   private connection: RedisConnectionBase;
 
-  constructor(options: IRedisConnectionOptions) {
+  public constructor(options: IRedisConnectionOptions) {
     switch (options.type) {
       case RedisConnectionType.CACHE:
         this.connection = new RedisConnectionCache(options);
