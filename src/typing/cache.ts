@@ -1,12 +1,12 @@
 import { TRedisClient } from "./index";
 import { Logger } from "@lindorm-io/winston";
-import Joi from "@hapi/joi";
 
-export interface ICache<Entity> {
+export interface ICache<Interface, Entity> {
   create(entity: Entity): Promise<Entity>;
   update(entity: Entity): Promise<Entity>;
   find(id: string): Promise<Entity>;
   findAll(): Promise<Array<Entity>>;
+  findMany(filter: Partial<Interface>): Promise<Array<Entity>>;
   remove(entity: Entity): Promise<void>;
 }
 
@@ -18,5 +18,4 @@ export interface ICacheOptions {
 
 export interface ICacheBaseOptions extends ICacheOptions {
   entityName: string;
-  schema: Joi.Schema;
 }

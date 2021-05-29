@@ -1,3 +1,5 @@
+import { Logger } from "@lindorm-io/winston";
+
 export const logger = {
   error: (): void => undefined,
   warn: (): void => undefined,
@@ -6,4 +8,4 @@ export const logger = {
   debug: (): void => undefined,
   silly: (): void => undefined,
   createChildLogger: (): any => logger,
-};
+} as unknown as Logger;
