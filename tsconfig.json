@@ -11,6 +11,7 @@
     "removeComments": true,
     "rootDir": "src",
     "sourceMap": true,
+    "strict": true,
     "target": "ESNEXT"
   },
   "include": [
@@ -18,7 +19,6 @@
   ],
   "exclude": [
     "node_modules",
-    "src/test/**/*.ts",
     "**/*.spec.ts",
     "**/*.test.ts"
   ]
