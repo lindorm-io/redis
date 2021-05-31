@@ -14,7 +14,7 @@ import { RedisConnectionType } from "../enum";
 import { ICacheOptions, TRedisClient } from "../typing";
 import { logger } from "../test";
 
-MockDate.set("2020-01-01 08:00:00.000");
+MockDate.set("2020-01-01T08:00:00.000Z");
 
 interface ITestEntityAttributes extends IEntityAttributes {
   name: string;
@@ -119,7 +119,12 @@ describe("CacheBase", () => {
   });
 
   test("should create entity with expiry", async () => {
-    // @ts-ignore
+    await expect(cache.create(entity, 999)).resolves.toMatchSnapshot();
+
+    expect(inMemoryCache).toMatchSnapshot();
+  });
+
+  test("should create entity with expiry", async () => {
     cache = new TestCache({ client, expiresInSeconds: 100, logger });
 
     await expect(cache.create(entity)).resolves.toMatchSnapshot();

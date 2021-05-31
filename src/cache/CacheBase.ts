@@ -10,7 +10,7 @@ export abstract class CacheBase<Interface extends IEntityAttributes, Entity exte
 {
   protected abstract createEntity(data: Interface): Entity;
 
-  public async create(entity: Entity): Promise<Entity> {
+  public async create(entity: Entity, expiresInSeconds?: number): Promise<Entity> {
     await entity.schemaValidation();
 
     const start = Date.now();
@@ -25,7 +25,7 @@ export abstract class CacheBase<Interface extends IEntityAttributes, Entity exte
       }
     }
 
-    const result = await this.client.set(key, json, this.expiresInSeconds);
+    const result = await this.client.set(key, json, expiresInSeconds || this.expiresInSeconds);
     const success = result === "OK";
 
     this.logger.debug("create", {

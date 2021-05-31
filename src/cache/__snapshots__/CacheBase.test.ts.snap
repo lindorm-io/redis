@@ -37,6 +37,27 @@ exports[`CacheBase should create entity with expiry 2`] = `
 Object {
   "mock::10192b05-6d39-4a2d-907a-32318fda8cb9": Object {
     "blob": "{\\"json\\":{\\"id\\":\\"10192b05-6d39-4a2d-907a-32318fda8cb9\\",\\"created\\":\\"2020-01-01T08:00:00.000Z\\",\\"events\\":[],\\"updated\\":\\"2020-01-01T08:00:00.000Z\\",\\"version\\":\\"0\\",\\"name\\":\\"name\\",\\"hasCreatedFunctionBeenCalled\\":\\"false\\"},\\"meta\\":{\\"id\\":\\"string\\",\\"created\\":\\"date\\",\\"events\\":[],\\"updated\\":\\"date\\",\\"version\\":\\"number\\",\\"name\\":\\"string\\",\\"hasCreatedFunctionBeenCalled\\":\\"boolean\\"}}",
+    "expiresInSeconds": 999,
+  },
+}
+`;
+
+exports[`CacheBase should create entity with expiry 3`] = `
+Object {
+  "created": 2020-01-01T08:00:00.000Z,
+  "events": Array [],
+  "hasCreatedFunctionBeenCalled": true,
+  "id": "10192b05-6d39-4a2d-907a-32318fda8cb9",
+  "name": "name",
+  "updated": 2020-01-01T08:00:00.000Z,
+  "version": 0,
+}
+`;
+
+exports[`CacheBase should create entity with expiry 4`] = `
+Object {
+  "mock::10192b05-6d39-4a2d-907a-32318fda8cb9": Object {
+    "blob": "{\\"json\\":{\\"id\\":\\"10192b05-6d39-4a2d-907a-32318fda8cb9\\",\\"created\\":\\"2020-01-01T08:00:00.000Z\\",\\"events\\":[],\\"updated\\":\\"2020-01-01T08:00:00.000Z\\",\\"version\\":\\"0\\",\\"name\\":\\"name\\",\\"hasCreatedFunctionBeenCalled\\":\\"false\\"},\\"meta\\":{\\"id\\":\\"string\\",\\"created\\":\\"date\\",\\"events\\":[],\\"updated\\":\\"date\\",\\"version\\":\\"number\\",\\"name\\":\\"string\\",\\"hasCreatedFunctionBeenCalled\\":\\"boolean\\"}}",
     "expiresInSeconds": 100,
   },
 }

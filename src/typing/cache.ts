@@ -2,7 +2,7 @@ import { TRedisClient } from "./index";
 import { Logger } from "@lindorm-io/winston";
 
 export interface ICache<Interface, Entity> {
-  create(entity: Entity): Promise<Entity>;
+  create(entity: Entity, expiresInSeconds?: number): Promise<Entity>;
   update(entity: Entity): Promise<Entity>;
   find(id: string): Promise<Entity>;
   findAll(): Promise<Array<Entity>>;
