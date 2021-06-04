@@ -1,10 +1,10 @@
 import { CacheEntityNotFoundError, CacheEntityNotSetError } from "../error";
 import { ICache } from "../typing";
-import { EntityCreationError, IEntity, IEntityAttributes } from "@lindorm-io/entity";
+import { EntityCreationError, IEntity, EntityAttributes } from "@lindorm-io/entity";
 import { RedisCache } from "./RedisCache";
 import { filter as _filter } from "lodash";
 
-export abstract class CacheBase<Interface extends IEntityAttributes, Entity extends IEntity<Interface>>
+export abstract class CacheBase<Interface extends EntityAttributes, Entity extends IEntity<Interface>>
   extends RedisCache
   implements ICache<Interface, Entity>
 {

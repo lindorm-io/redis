@@ -5,23 +5,24 @@ import {
   EntityBase,
   EntityCreationError,
   IEntity,
-  IEntityAttributes,
-  IEntityOptions,
+  EntityAttributes,
+  EntityOptions,
   JOI_ENTITY_BASE,
 } from "@lindorm-io/entity";
 import { RedisConnection } from "../infrastructure";
 import { RedisConnectionType } from "../enum";
-import { ICacheOptions, TRedisClient } from "../typing";
+import { CacheOptions } from "../typing";
 import { logger } from "../test";
+import { RedisClient } from "../class";
 
 MockDate.set("2020-01-01T08:00:00.000Z");
 
-interface ITestEntityAttributes extends IEntityAttributes {
+interface ITestEntityAttributes extends EntityAttributes {
   name: string;
   hasCreatedFunctionBeenCalled: boolean;
 }
 
-interface ITestEntityOptions extends IEntityOptions {
+interface ITestEntityOptions extends EntityOptions {
   name: string;
   hasCreatedFunctionBeenCalled?: boolean;
 }
@@ -69,7 +70,7 @@ class TestEntity extends EntityBase<ITestEntityAttributes> implements ITestEntit
 }
 
 class TestCache extends CacheBase<ITestEntityAttributes, TestEntity> {
-  constructor(options: ICacheOptions) {
+  constructor(options: CacheOptions) {
     super({
       ...options,
       entityName: "mock",
@@ -84,7 +85,7 @@ class TestCache extends CacheBase<ITestEntityAttributes, TestEntity> {
 describe("CacheBase", () => {
   let inMemoryCache: Record<string, any>;
   let redis: RedisConnection;
-  let client: TRedisClient;
+  let client: RedisClient;
   let cache: TestCache;
   let entity: TestEntity;
 
@@ -189,7 +190,7 @@ describe("CacheBase", () => {
   test("should remove entity", async () => {
     await cache.create(entity);
 
-    await expect(cache.remove(entity)).resolves.toBe(undefined);
+    await expect(cache.remove(entity)).resolves.toBeUndefined();
 
     expect(inMemoryCache).toMatchSnapshot();
   });

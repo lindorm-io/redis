@@ -1,5 +1,5 @@
-import { TRedisClient } from "./index";
 import { Logger } from "@lindorm-io/winston";
+import { RedisClient } from "../class";
 
 export interface ICache<Interface, Entity> {
   create(entity: Entity, expiresInSeconds?: number): Promise<Entity>;
@@ -10,12 +10,12 @@ export interface ICache<Interface, Entity> {
   remove(entity: Entity): Promise<void>;
 }
 
-export interface ICacheOptions {
-  client: TRedisClient;
+export interface CacheOptions {
+  client: RedisClient;
   expiresInSeconds?: number;
   logger: Logger;
 }
 
-export interface ICacheBaseOptions extends ICacheOptions {
+export interface CacheBaseOptions extends CacheOptions {
   entityName: string;
 }

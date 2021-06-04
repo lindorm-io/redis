@@ -17,6 +17,10 @@ export class RedisInMemoryClient implements IRedisClient {
     return Promise.resolve("OK");
   }
 
+  public isConnected(): boolean {
+    return true;
+  }
+
   public async set(key: string, value: Record<string, any>, expiresInSeconds?: number): Promise<string> {
     this.cache[key] = { blob: stringifyBlob(value), expiresInSeconds };
 

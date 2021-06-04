@@ -1,21 +1,24 @@
 import redis, { ClientOpts } from "redis";
 import { ClientInitialisationError } from "../error";
-import { IRedisClient, TPromise } from "../typing";
+import { IRedisClient } from "../typing";
 import { isNumber } from "lodash";
 import { parseBlob, stringifyBlob } from "@lindorm-io/string-blob";
 import { promisify } from "util";
 
-export interface IAsyncClient {
-  del: TPromise<number>;
-  get: TPromise<string | null>;
-  keys: TPromise<Array<string>>;
-  quit: TPromise<string>;
-  set: TPromise<unknown>;
-  setEx: TPromise<string>;
+type ClientPromise<T> = (...args: any) => Promise<T>;
+
+interface AsyncClient {
+  del: ClientPromise<number>;
+  get: ClientPromise<string | null>;
+  keys: ClientPromise<Array<string>>;
+  quit: ClientPromise<string>;
+  set: ClientPromise<unknown>;
+  setEx: ClientPromise<string>;
+  connected(): boolean;
 }
 
 export class RedisClient implements IRedisClient {
-  private _client: IAsyncClient | undefined;
+  private _client: AsyncClient | undefined;
   private readonly clientOptions: ClientOpts;
 
   public constructor(options: ClientOpts) {
@@ -33,6 +36,7 @@ export class RedisClient implements IRedisClient {
       quit: promisify(client.quit).bind(client),
       set: promisify(client.set).bind(client),
       setEx: promisify(client.setex).bind(client),
+      connected: (): boolean => client.connected,
     };
   }
 
@@ -42,6 +46,13 @@ export class RedisClient implements IRedisClient {
     }
 
     return this._client.quit();
+  }
+
+  public isConnected(): boolean {
+    if (!this._client) {
+      return false;
+    }
+    return this._client.connected();
   }
 
   public async set(key: string, value: Record<string, any>, expiresInSeconds?: number): Promise<string | unknown> {

@@ -1,9 +1,9 @@
-import { IRedisConnection, IRedisConnectionOptions } from "../typing";
+import { IRedisConnection, RedisConnectionOptions } from "../typing";
 import { RedisClient } from "../class";
 import { RedisConnectionBase } from "./RedisConnectionBase";
 
 export class RedisConnectionCache extends RedisConnectionBase implements IRedisConnection {
-  public constructor(options: IRedisConnectionOptions) {
+  public constructor(options: RedisConnectionOptions) {
     super(options);
   }
 

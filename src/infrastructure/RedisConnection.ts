@@ -1,13 +1,14 @@
-import { IRedisConnection, IRedisConnectionOptions, TRedisClient } from "../typing";
+import { IRedisConnection, RedisConnectionOptions } from "../typing";
 import { RedisConnectionBase } from "./RedisConnectionBase";
 import { RedisConnectionCache } from "./RedisConnectionCache";
 import { RedisConnectionMemory } from "./RedisConnectionMemory";
 import { RedisConnectionType } from "../enum";
+import { RedisClient } from "../class";
 
 export class RedisConnection implements IRedisConnection {
   private connection: RedisConnectionBase;
 
-  public constructor(options: IRedisConnectionOptions) {
+  public constructor(options: RedisConnectionOptions) {
     switch (options.type) {
       case RedisConnectionType.CACHE:
         this.connection = new RedisConnectionCache(options);
@@ -30,7 +31,11 @@ export class RedisConnection implements IRedisConnection {
     return this.connection.disconnect();
   }
 
-  public client(): TRedisClient {
+  public isConnected(): boolean {
+    return this.connection.isConnected();
+  }
+
+  public client(): RedisClient {
     return this.connection.client();
   }
 }
