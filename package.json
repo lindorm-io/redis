@@ -23,6 +23,7 @@
     "check:lint:fix": "eslint --ext .ts ./src/ --fix",
     "check:types": "tsc -p tsconfig.json --noEmit",
     "check:types:watch": "tsc -p tsconfig.json --noEmit --watch",
+    "postpublish": "rimraf dist",
     "postversion": "git push --no-verify && git push --tags --no-verify",
     "prepublishOnly": "npm run build:clean && npm run build",
     "preversion": "npm run validate",
