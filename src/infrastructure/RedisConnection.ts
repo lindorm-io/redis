@@ -9,7 +9,9 @@ export class RedisConnection implements IRedisConnection {
   private connection: RedisConnectionBase;
 
   public constructor(options: RedisConnectionOptions) {
-    switch (options.type) {
+    const type = options.type || RedisConnectionType.CACHE;
+
+    switch (type) {
       case RedisConnectionType.CACHE:
         this.connection = new RedisConnectionCache(options);
         break;
@@ -19,7 +21,7 @@ export class RedisConnection implements IRedisConnection {
         break;
 
       default:
-        throw new Error(`Unknown connection type: [ ${options.type} ]`);
+        throw new Error(`Unknown connection type: [ ${type} ]`);
     }
   }
 

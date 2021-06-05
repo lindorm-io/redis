@@ -11,5 +11,5 @@ export interface IRedisConnection {
 
 export interface RedisConnectionOptions extends ClientOpts {
   inMemoryCache?: Record<string, any>;
-  type: RedisConnectionType;
+  type?: RedisConnectionType;
 }
