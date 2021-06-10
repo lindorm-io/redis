@@ -1,9 +1,9 @@
 import redis, { ClientOpts } from "redis";
-import { ClientInitialisationError } from "../error";
 import { IRedisClient } from "../typing";
 import { isNumber } from "lodash";
 import { parseBlob, stringifyBlob } from "@lindorm-io/string-blob";
 import { promisify } from "util";
+import { RedisError } from "../error";
 
 type ClientPromise<T> = (...args: any) => Promise<T>;
 
@@ -42,7 +42,7 @@ export class RedisClient implements IRedisClient {
 
   public async quit(): Promise<string | undefined> {
     if (!this._client) {
-      throw new ClientInitialisationError();
+      throw new RedisError("Client not found");
     }
 
     return this._client.quit();
@@ -57,7 +57,7 @@ export class RedisClient implements IRedisClient {
 
   public async set(key: string, value: Record<string, any>, expiresInSeconds?: number): Promise<string | unknown> {
     if (!this._client) {
-      throw new ClientInitialisationError();
+      throw new RedisError("Client not found");
     }
 
     let result: string | unknown;
@@ -73,7 +73,7 @@ export class RedisClient implements IRedisClient {
 
   public async get(key: string): Promise<Record<string, any> | undefined> {
     if (!this._client) {
-      throw new ClientInitialisationError();
+      throw new RedisError("Client not found");
     }
 
     const result = await this._client.get(key);
@@ -85,7 +85,7 @@ export class RedisClient implements IRedisClient {
 
   public async getAll(pattern: string): Promise<Array<Record<string, any>>> {
     if (!this._client) {
-      throw new ClientInitialisationError();
+      throw new RedisError("Client not found");
     }
 
     const keys = await this._client.keys(pattern);
@@ -101,7 +101,7 @@ export class RedisClient implements IRedisClient {
 
   public async del(key: string): Promise<number> {
     if (!this._client) {
-      throw new ClientInitialisationError();
+      throw new RedisError("Client not found");
     }
 
     return this._client.del(key);

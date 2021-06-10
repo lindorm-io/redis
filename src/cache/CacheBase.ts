@@ -1,8 +1,8 @@
-import { CacheEntityNotFoundError, CacheEntityNotSetError } from "../error";
 import { ICache } from "../typing";
 import { EntityCreationError, IEntity, EntityAttributes } from "@lindorm-io/entity";
 import { RedisCache } from "./RedisCache";
 import { filter as _filter } from "lodash";
+import { CacheError, EntityNotFoundError } from "../error";
 
 export abstract class CacheBase<Interface extends EntityAttributes, Entity extends IEntity<Interface>>
   extends RedisCache
@@ -35,7 +35,9 @@ export abstract class CacheBase<Interface extends EntityAttributes, Entity exten
     });
 
     if (!success) {
-      throw new CacheEntityNotSetError(key, result);
+      throw new CacheError("Unable to set entity in cache", {
+        debug: { key, json, result },
+      });
     }
 
     return entity;
@@ -58,7 +60,9 @@ export abstract class CacheBase<Interface extends EntityAttributes, Entity exten
     });
 
     if (!result) {
-      throw new CacheEntityNotFoundError(prefixKey, result);
+      throw new EntityNotFoundError("Unable to find entity in cache", {
+        debug: { prefixKey, result },
+      });
     }
 
     return this.createEntity(result as Interface);
@@ -103,7 +107,9 @@ export abstract class CacheBase<Interface extends EntityAttributes, Entity exten
     });
 
     if (deletedRows === 0) {
-      throw new CacheEntityNotFoundError(prefixKey, { deletedRows });
+      throw new CacheError("Unable to delete entity from cache", {
+        debug: { prefixKey, deletedRows },
+      });
     }
   }
 }
