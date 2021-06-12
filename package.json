@@ -41,11 +41,11 @@
     "validate": "npm run test:clear && npm run check:lint && npm run check:types && npm test"
   },
   "dependencies": {
-    "@lindorm-io/core": "^0.2.4",
-    "@lindorm-io/entity": "^0.1.4",
-    "@lindorm-io/errors": "^0.1.4",
+    "@lindorm-io/core": "^0.2.5",
+    "@lindorm-io/entity": "^0.1.5",
+    "@lindorm-io/errors": "^0.1.5",
     "@lindorm-io/string-blob": "0.0.2",
-    "@lindorm-io/winston": "^0.1.5",
+    "@lindorm-io/winston": "^0.1.6",
     "lodash": "^4.17.21",
     "redis": "^3.1.2"
   },
