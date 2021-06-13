@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CacheBase should create entity 1`] = `
+exports[`LindormCache should create entity 1`] = `
 Object {
   "created": 2020-01-01T08:00:00.000Z,
   "events": Array [],
@@ -12,7 +12,7 @@ Object {
 }
 `;
 
-exports[`CacheBase should create entity 2`] = `
+exports[`LindormCache should create entity 2`] = `
 Object {
   "mock::10192b05-6d39-4a2d-907a-32318fda8cb9": Object {
     "blob": "{\\"json\\":{\\"id\\":\\"10192b05-6d39-4a2d-907a-32318fda8cb9\\",\\"created\\":\\"2020-01-01T08:00:00.000Z\\",\\"events\\":[],\\"updated\\":\\"2020-01-01T08:00:00.000Z\\",\\"version\\":\\"0\\",\\"name\\":\\"name\\",\\"hasCreatedFunctionBeenCalled\\":\\"false\\"},\\"meta\\":{\\"id\\":\\"string\\",\\"created\\":\\"date\\",\\"events\\":[],\\"updated\\":\\"date\\",\\"version\\":\\"number\\",\\"name\\":\\"string\\",\\"hasCreatedFunctionBeenCalled\\":\\"boolean\\"}}",
@@ -21,7 +21,7 @@ Object {
 }
 `;
 
-exports[`CacheBase should create entity with expiry 1`] = `
+exports[`LindormCache should create entity with expiry 1`] = `
 Object {
   "created": 2020-01-01T08:00:00.000Z,
   "events": Array [],
@@ -33,7 +33,7 @@ Object {
 }
 `;
 
-exports[`CacheBase should create entity with expiry 2`] = `
+exports[`LindormCache should create entity with expiry 2`] = `
 Object {
   "mock::10192b05-6d39-4a2d-907a-32318fda8cb9": Object {
     "blob": "{\\"json\\":{\\"id\\":\\"10192b05-6d39-4a2d-907a-32318fda8cb9\\",\\"created\\":\\"2020-01-01T08:00:00.000Z\\",\\"events\\":[],\\"updated\\":\\"2020-01-01T08:00:00.000Z\\",\\"version\\":\\"0\\",\\"name\\":\\"name\\",\\"hasCreatedFunctionBeenCalled\\":\\"false\\"},\\"meta\\":{\\"id\\":\\"string\\",\\"created\\":\\"date\\",\\"events\\":[],\\"updated\\":\\"date\\",\\"version\\":\\"number\\",\\"name\\":\\"string\\",\\"hasCreatedFunctionBeenCalled\\":\\"boolean\\"}}",
@@ -42,7 +42,7 @@ Object {
 }
 `;
 
-exports[`CacheBase should create entity with expiry 3`] = `
+exports[`LindormCache should create entity with expiry 3`] = `
 Object {
   "created": 2020-01-01T08:00:00.000Z,
   "events": Array [],
@@ -54,7 +54,7 @@ Object {
 }
 `;
 
-exports[`CacheBase should create entity with expiry 4`] = `
+exports[`LindormCache should create entity with expiry 4`] = `
 Object {
   "mock::10192b05-6d39-4a2d-907a-32318fda8cb9": Object {
     "blob": "{\\"json\\":{\\"id\\":\\"10192b05-6d39-4a2d-907a-32318fda8cb9\\",\\"created\\":\\"2020-01-01T08:00:00.000Z\\",\\"events\\":[],\\"updated\\":\\"2020-01-01T08:00:00.000Z\\",\\"version\\":\\"0\\",\\"name\\":\\"name\\",\\"hasCreatedFunctionBeenCalled\\":\\"false\\"},\\"meta\\":{\\"id\\":\\"string\\",\\"created\\":\\"date\\",\\"events\\":[],\\"updated\\":\\"date\\",\\"version\\":\\"number\\",\\"name\\":\\"string\\",\\"hasCreatedFunctionBeenCalled\\":\\"boolean\\"}}",
@@ -63,7 +63,7 @@ Object {
 }
 `;
 
-exports[`CacheBase should find all entities 1`] = `
+exports[`LindormCache should find all entities 1`] = `
 Array [
   Object {
     "created": 2020-01-01T08:00:00.000Z,
@@ -86,7 +86,7 @@ Array [
 ]
 `;
 
-exports[`CacheBase should find entity 1`] = `
+exports[`LindormCache should find entity 1`] = `
 Object {
   "created": 2020-01-01T08:00:00.000Z,
   "events": Array [],
@@ -98,7 +98,7 @@ Object {
 }
 `;
 
-exports[`CacheBase should find many entities 1`] = `
+exports[`LindormCache should find many entities 1`] = `
 Array [
   Object {
     "created": 2020-01-01T08:00:00.000Z,
@@ -121,13 +121,13 @@ Array [
 ]
 `;
 
-exports[`CacheBase should remove entity 1`] = `
+exports[`LindormCache should remove entity 1`] = `
 Object {
   "mock::10192b05-6d39-4a2d-907a-32318fda8cb9": undefined,
 }
 `;
 
-exports[`CacheBase should update entity 1`] = `
+exports[`LindormCache should update entity 1`] = `
 Object {
   "created": 2020-01-01T08:00:00.000Z,
   "events": Array [],

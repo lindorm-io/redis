@@ -1,13 +1,13 @@
 import Joi from "joi";
 import MockDate from "mockdate";
-import { CacheBase } from "./CacheBase";
+import { LindormCache } from "./LindormCache";
 import {
-  EntityBase,
-  EntityCreationError,
-  IEntity,
   EntityAttributes,
+  EntityCreationError,
   EntityOptions,
+  ILindormEntity,
   JOI_ENTITY_BASE,
+  LindormEntity,
 } from "@lindorm-io/entity";
 import { RedisConnection } from "../infrastructure";
 import { RedisConnectionType } from "../enum";
@@ -27,7 +27,7 @@ interface ITestEntityOptions extends EntityOptions {
   hasCreatedFunctionBeenCalled?: boolean;
 }
 
-interface ITestEntity extends IEntity<ITestEntityAttributes> {}
+interface ITestEntity extends ILindormEntity<ITestEntityAttributes> {}
 
 const schema = Joi.object({
   ...JOI_ENTITY_BASE,
@@ -35,7 +35,7 @@ const schema = Joi.object({
   hasCreatedFunctionBeenCalled: Joi.boolean().required(),
 });
 
-class TestEntity extends EntityBase<ITestEntityAttributes> implements ITestEntity {
+class TestEntity extends LindormEntity<ITestEntityAttributes> implements ITestEntity {
   public name: string;
   public hasCreatedFunctionBeenCalled: boolean;
 
@@ -69,7 +69,7 @@ class TestEntity extends EntityBase<ITestEntityAttributes> implements ITestEntit
   }
 }
 
-class TestCache extends CacheBase<ITestEntityAttributes, TestEntity> {
+class TestCache extends LindormCache<ITestEntityAttributes, TestEntity> {
   constructor(options: CacheOptions) {
     super({
       ...options,
@@ -82,7 +82,7 @@ class TestCache extends CacheBase<ITestEntityAttributes, TestEntity> {
   }
 }
 
-describe("CacheBase", () => {
+describe("LindormCache", () => {
   let inMemoryCache: Record<string, any>;
   let redis: RedisConnection;
   let client: RedisClient;

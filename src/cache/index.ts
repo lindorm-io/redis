@@ -1,2 +1,2 @@
+export * from "./LindormCache";
 export * from "./CacheBase";
-export * from "./RedisCache";

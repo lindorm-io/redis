@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "@lindorm-io/core": "^0.2.5",
-    "@lindorm-io/entity": "^0.1.5",
+    "@lindorm-io/entity": "^0.2.0",
     "@lindorm-io/errors": "^0.1.5",
     "@lindorm-io/string-blob": "0.0.2",
     "@lindorm-io/winston": "^0.1.6",

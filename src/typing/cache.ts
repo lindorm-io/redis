@@ -1,7 +1,7 @@
 import { Logger } from "@lindorm-io/winston";
 import { RedisClient } from "../class";
 
-export interface ICache<Interface, Entity> {
+export interface ILindormCache<Interface, Entity> {
   create(entity: Entity, expiresInSeconds?: number): Promise<Entity>;
   update(entity: Entity): Promise<Entity>;
   find(id: string): Promise<Entity>;
@@ -16,6 +16,6 @@ export interface CacheOptions {
   logger: Logger;
 }
 
-export interface CacheBaseOptions extends CacheOptions {
+export interface LindormCacheOptions extends CacheOptions {
   entityName: string;
 }

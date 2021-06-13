@@ -26,17 +26,30 @@ await redis.disconnect();
 ```
 
 ### Cache
+
 ```typescript
-class EntityCache extends CacheBase implements ICache {}
+export class EntityCache extends CacheBase<EntityAttributes, Entity> {
+  public constructor(options: CacheOptions) {
+    super({
+      ...options,
+      entityName: "Entity",
+    });
+  }
+
+  protected createEntity(data: EntityAttributes): Entity {
+    return new Entity(data);
+  }
+}
 
 const cache = new EntityCache({
   client,
-  expiresInSeconds: 100,
-  port: 6379,
+  expiresInSeconds : 100,
+  port : 6379,
   logger, // "@lindorm-io/winston" logger
 });
 
-await cache.set(entity);
-const entity = await cache.get("key");
-await cache.del(entity);
+await cache.create(entity);
+await cache.update(entity);
+const entity = await cache.find("key");
+await cache.remove(entity);
 ```
