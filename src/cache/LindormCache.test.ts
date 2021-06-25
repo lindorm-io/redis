@@ -113,22 +113,22 @@ describe("LindormCache", () => {
     jest.clearAllMocks();
   });
 
-  test("should create entity", async () => {
+  test("should create and return entity", async () => {
     await expect(cache.create(entity)).resolves.toMatchSnapshot();
 
     expect(inMemoryCache).toMatchSnapshot();
   });
 
   test("should create entity with expiry", async () => {
-    await expect(cache.create(entity, 999)).resolves.toMatchSnapshot();
+    await expect(cache.create(entity, 999)).resolves.toBeTruthy();
 
     expect(inMemoryCache).toMatchSnapshot();
   });
 
-  test("should create entity with expiry", async () => {
+  test("should create entity with default expiry", async () => {
     cache = new TestCache({ client, expiresInSeconds: 100, logger });
 
-    await expect(cache.create(entity)).resolves.toMatchSnapshot();
+    await expect(cache.create(entity)).resolves.toBeTruthy();
 
     expect(inMemoryCache).toMatchSnapshot();
   });
@@ -144,7 +144,19 @@ describe("LindormCache", () => {
 
     entity.name = "new name";
 
-    await expect(cache.update(entity)).resolves.toMatchSnapshot();
+    await expect(cache.update(entity)).resolves.toBeTruthy();
+
+    expect(inMemoryCache).toMatchSnapshot();
+  });
+
+  test("should update entity with expiry", async () => {
+    await cache.create(entity);
+
+    entity.name = "new name";
+
+    await expect(cache.update(entity)).resolves.toBeTruthy();
+
+    expect(inMemoryCache).toMatchSnapshot();
   });
 
   test("should find all entities", async () => {

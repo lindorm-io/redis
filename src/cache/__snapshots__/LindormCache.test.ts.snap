@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`LindormCache should create entity 1`] = `
+exports[`LindormCache should create and return entity 1`] = `
 Object {
   "created": 2020-01-01T08:00:00.000Z,
   "events": Array [],
@@ -12,7 +12,7 @@ Object {
 }
 `;
 
-exports[`LindormCache should create entity 2`] = `
+exports[`LindormCache should create and return entity 2`] = `
 Object {
   "mock::10192b05-6d39-4a2d-907a-32318fda8cb9": Object {
     "blob": "{\\"json\\":{\\"id\\":\\"10192b05-6d39-4a2d-907a-32318fda8cb9\\",\\"created\\":\\"2020-01-01T08:00:00.000Z\\",\\"events\\":[],\\"updated\\":\\"2020-01-01T08:00:00.000Z\\",\\"version\\":\\"0\\",\\"name\\":\\"name\\",\\"hasCreatedFunctionBeenCalled\\":\\"false\\"},\\"meta\\":{\\"id\\":\\"string\\",\\"created\\":\\"date\\",\\"events\\":[],\\"updated\\":\\"date\\",\\"version\\":\\"number\\",\\"name\\":\\"string\\",\\"hasCreatedFunctionBeenCalled\\":\\"boolean\\"}}",
@@ -21,44 +21,20 @@ Object {
 }
 `;
 
-exports[`LindormCache should create entity with expiry 1`] = `
-Object {
-  "created": 2020-01-01T08:00:00.000Z,
-  "events": Array [],
-  "hasCreatedFunctionBeenCalled": true,
-  "id": "10192b05-6d39-4a2d-907a-32318fda8cb9",
-  "name": "name",
-  "updated": 2020-01-01T08:00:00.000Z,
-  "version": 0,
-}
-`;
-
-exports[`LindormCache should create entity with expiry 2`] = `
-Object {
-  "mock::10192b05-6d39-4a2d-907a-32318fda8cb9": Object {
-    "blob": "{\\"json\\":{\\"id\\":\\"10192b05-6d39-4a2d-907a-32318fda8cb9\\",\\"created\\":\\"2020-01-01T08:00:00.000Z\\",\\"events\\":[],\\"updated\\":\\"2020-01-01T08:00:00.000Z\\",\\"version\\":\\"0\\",\\"name\\":\\"name\\",\\"hasCreatedFunctionBeenCalled\\":\\"false\\"},\\"meta\\":{\\"id\\":\\"string\\",\\"created\\":\\"date\\",\\"events\\":[],\\"updated\\":\\"date\\",\\"version\\":\\"number\\",\\"name\\":\\"string\\",\\"hasCreatedFunctionBeenCalled\\":\\"boolean\\"}}",
-    "expiresInSeconds": 999,
-  },
-}
-`;
-
-exports[`LindormCache should create entity with expiry 3`] = `
-Object {
-  "created": 2020-01-01T08:00:00.000Z,
-  "events": Array [],
-  "hasCreatedFunctionBeenCalled": true,
-  "id": "10192b05-6d39-4a2d-907a-32318fda8cb9",
-  "name": "name",
-  "updated": 2020-01-01T08:00:00.000Z,
-  "version": 0,
-}
-`;
-
-exports[`LindormCache should create entity with expiry 4`] = `
+exports[`LindormCache should create entity with default expiry 1`] = `
 Object {
   "mock::10192b05-6d39-4a2d-907a-32318fda8cb9": Object {
     "blob": "{\\"json\\":{\\"id\\":\\"10192b05-6d39-4a2d-907a-32318fda8cb9\\",\\"created\\":\\"2020-01-01T08:00:00.000Z\\",\\"events\\":[],\\"updated\\":\\"2020-01-01T08:00:00.000Z\\",\\"version\\":\\"0\\",\\"name\\":\\"name\\",\\"hasCreatedFunctionBeenCalled\\":\\"false\\"},\\"meta\\":{\\"id\\":\\"string\\",\\"created\\":\\"date\\",\\"events\\":[],\\"updated\\":\\"date\\",\\"version\\":\\"number\\",\\"name\\":\\"string\\",\\"hasCreatedFunctionBeenCalled\\":\\"boolean\\"}}",
     "expiresInSeconds": 100,
+  },
+}
+`;
+
+exports[`LindormCache should create entity with expiry 1`] = `
+Object {
+  "mock::10192b05-6d39-4a2d-907a-32318fda8cb9": Object {
+    "blob": "{\\"json\\":{\\"id\\":\\"10192b05-6d39-4a2d-907a-32318fda8cb9\\",\\"created\\":\\"2020-01-01T08:00:00.000Z\\",\\"events\\":[],\\"updated\\":\\"2020-01-01T08:00:00.000Z\\",\\"version\\":\\"0\\",\\"name\\":\\"name\\",\\"hasCreatedFunctionBeenCalled\\":\\"false\\"},\\"meta\\":{\\"id\\":\\"string\\",\\"created\\":\\"date\\",\\"events\\":[],\\"updated\\":\\"date\\",\\"version\\":\\"number\\",\\"name\\":\\"string\\",\\"hasCreatedFunctionBeenCalled\\":\\"boolean\\"}}",
+    "expiresInSeconds": 999,
   },
 }
 `;
@@ -129,12 +105,18 @@ Object {
 
 exports[`LindormCache should update entity 1`] = `
 Object {
-  "created": 2020-01-01T08:00:00.000Z,
-  "events": Array [],
-  "hasCreatedFunctionBeenCalled": true,
-  "id": "10192b05-6d39-4a2d-907a-32318fda8cb9",
-  "name": "new name",
-  "updated": 2020-01-01T08:00:00.000Z,
-  "version": 0,
+  "mock::10192b05-6d39-4a2d-907a-32318fda8cb9": Object {
+    "blob": "{\\"json\\":{\\"id\\":\\"10192b05-6d39-4a2d-907a-32318fda8cb9\\",\\"created\\":\\"2020-01-01T08:00:00.000Z\\",\\"events\\":[],\\"updated\\":\\"2020-01-01T08:00:00.000Z\\",\\"version\\":\\"0\\",\\"name\\":\\"new name\\",\\"hasCreatedFunctionBeenCalled\\":\\"true\\"},\\"meta\\":{\\"id\\":\\"string\\",\\"created\\":\\"date\\",\\"events\\":[],\\"updated\\":\\"date\\",\\"version\\":\\"number\\",\\"name\\":\\"string\\",\\"hasCreatedFunctionBeenCalled\\":\\"boolean\\"}}",
+    "expiresInSeconds": undefined,
+  },
+}
+`;
+
+exports[`LindormCache should update entity with expiry 1`] = `
+Object {
+  "mock::10192b05-6d39-4a2d-907a-32318fda8cb9": Object {
+    "blob": "{\\"json\\":{\\"id\\":\\"10192b05-6d39-4a2d-907a-32318fda8cb9\\",\\"created\\":\\"2020-01-01T08:00:00.000Z\\",\\"events\\":[],\\"updated\\":\\"2020-01-01T08:00:00.000Z\\",\\"version\\":\\"0\\",\\"name\\":\\"new name\\",\\"hasCreatedFunctionBeenCalled\\":\\"true\\"},\\"meta\\":{\\"id\\":\\"string\\",\\"created\\":\\"date\\",\\"events\\":[],\\"updated\\":\\"date\\",\\"version\\":\\"number\\",\\"name\\":\\"string\\",\\"hasCreatedFunctionBeenCalled\\":\\"boolean\\"}}",
+    "expiresInSeconds": undefined,
+  },
 }
 `;

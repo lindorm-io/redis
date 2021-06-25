@@ -43,8 +43,29 @@ export abstract class LindormCache<Interface extends EntityAttributes, Entity ex
     return entity;
   }
 
-  public async update(entity: Entity): Promise<Entity> {
-    return this.create(entity);
+  public async update(entity: Entity, expiresInSeconds?: number): Promise<Entity> {
+    await entity.schemaValidation();
+
+    const start = Date.now();
+    const json = entity.toJSON();
+    const key = `${this.prefix}::${entity.getKey()}`;
+
+    const result = await this.client.set(key, json, expiresInSeconds);
+    const success = result === "OK";
+
+    this.logger.debug("update", {
+      payload: Object.keys(json),
+      result: { success },
+      time: Date.now() - start,
+    });
+
+    if (!success) {
+      throw new CacheError("Unable to set entity in cache", {
+        debug: { key, json, result },
+      });
+    }
+
+    return entity;
   }
 
   public async find(key: string): Promise<Entity> {
