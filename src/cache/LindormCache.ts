@@ -43,6 +43,16 @@ export abstract class LindormCache<Interface extends EntityAttributes, Entity ex
     return entity;
   }
 
+  public async createMany(entities: Array<Entity>, expiresInSeconds?: number): Promise<Array<Entity>> {
+    const promises: Array<Promise<Entity>> = [];
+
+    for (const entity of entities) {
+      promises.push(this.create(entity, expiresInSeconds));
+    }
+
+    return Promise.all(promises);
+  }
+
   public async update(entity: Entity, expiresInSeconds?: number): Promise<Entity> {
     await entity.schemaValidation();
 
@@ -66,6 +76,16 @@ export abstract class LindormCache<Interface extends EntityAttributes, Entity ex
     }
 
     return entity;
+  }
+
+  public async updateMany(entities: Array<Entity>, expiresInSeconds?: number): Promise<Array<Entity>> {
+    const promises: Array<Promise<Entity>> = [];
+
+    for (const entity of entities) {
+      promises.push(this.update(entity, expiresInSeconds));
+    }
+
+    return Promise.all(promises);
   }
 
   public async find(key: string): Promise<Entity> {

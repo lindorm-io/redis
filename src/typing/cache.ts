@@ -3,7 +3,9 @@ import { RedisClient } from "../class";
 
 export interface ILindormCache<Interface, Entity> {
   create(entity: Entity, expiresInSeconds?: number): Promise<Entity>;
-  update(entity: Entity): Promise<Entity>;
+  createMany(entities: Array<Entity>, expiresInSeconds?: number): Promise<Array<Entity>>;
+  update(entity: Entity, expiresInSeconds?: number): Promise<Entity>;
+  updateMany(entities: Array<Entity>, expiresInSeconds?: number): Promise<Array<Entity>>;
   find(id: string): Promise<Entity>;
   findAll(): Promise<Array<Entity>>;
   findMany(filter: Partial<Interface>): Promise<Array<Entity>>;
