@@ -29,7 +29,7 @@ export abstract class LindormCache<Interface extends EntityAttributes, Entity ex
     const success = result === "OK";
 
     this.logger.debug("create", {
-      payload: Object.keys(json),
+      payload: json,
       result: { success },
       time: Date.now() - start,
     });
@@ -54,7 +54,7 @@ export abstract class LindormCache<Interface extends EntityAttributes, Entity ex
     const success = result === "OK";
 
     this.logger.debug("update", {
-      payload: Object.keys(json),
+      payload: json,
       result: { success },
       time: Date.now() - start,
     });
